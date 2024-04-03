@@ -1,5 +1,8 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,9 @@ import ru.skypro.homework.dto.LoginDTO;
 import ru.skypro.homework.dto.RegisterDTO;
 import ru.skypro.homework.service.AuthService;
 
+import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
+import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
+
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -20,8 +26,25 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @Operation(
+            tags = TAG_AUTHORIZATION,
+            summary = AUTHORIZATION_USER,
+            responses = {
+                    @ApiResponse(
+                            responseCode = CODE_201,
+                            description = DESCRIPTION_CODE_201,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_401,
+                            description = DESCRIPTION_CODE_401,
+                            content = @Content()
+                    )
+            }
+    )
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO login) {
+    public ResponseEntity<?> login(@RequestBody(required = false) LoginDTO login) {
 
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
@@ -31,8 +54,25 @@ public class AuthController {
         }
     }
 
+    @Operation(
+            tags = TAG_REGISTRATION,
+            summary = REGISTRATION_USER,
+            responses = {
+                    @ApiResponse(
+                            responseCode = CODE_200,
+                            description = DESCRIPTION_CODE_200,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_400,
+                            description = DESCRIPTION_CODE_400,
+                            content = @Content()
+                    )
+            }
+    )
+
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDTO register) {
+    public ResponseEntity<?> register(@RequestBody(required = false) RegisterDTO register) {
 
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
