@@ -1,6 +1,6 @@
 package ru.skypro.homework.service;
 
-import ru.skypro.homework.dto.RegisterDTO;
+import ru.skypro.homework.dto.auth.RegisterDTO;
 
 public interface AuthService {
 

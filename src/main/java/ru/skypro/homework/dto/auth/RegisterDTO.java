@@ -1,6 +1,7 @@
-package ru.skypro.homework.dto;
+package ru.skypro.homework.dto.auth;
 
 import lombok.Data;
+import ru.skypro.homework.dto.Role;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;

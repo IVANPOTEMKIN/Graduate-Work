@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.skypro.homework.dto.LoginDTO;
-import ru.skypro.homework.dto.RegisterDTO;
+import ru.skypro.homework.dto.auth.LoginDTO;
+import ru.skypro.homework.dto.auth.RegisterDTO;
 import ru.skypro.homework.service.AuthService;
 
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
