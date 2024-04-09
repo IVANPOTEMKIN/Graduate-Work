@@ -1,12 +1,13 @@
 package ru.skypro.homework.dto.comment;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-
-import javax.validation.constraints.Size;
 
 @Data
 public class CreateOrUpdateCommentDTO {
 
-    @Size(min = 8, max = 64)
-    private String text; // текст комментария
+    @Schema(description = "текст комментария",
+            minLength = 8,
+            maxLength = 64)
+    private String text;
 }

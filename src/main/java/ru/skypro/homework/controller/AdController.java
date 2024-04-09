@@ -12,9 +12,6 @@ import ru.skypro.homework.dto.ad.AdDTO;
 import ru.skypro.homework.dto.ad.AdsDTO;
 import ru.skypro.homework.dto.ad.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ad.ExtendedAdDTO;
-import ru.skypro.homework.dto.comment.CommentDTO;
-import ru.skypro.homework.dto.comment.CommentsDTO;
-import ru.skypro.homework.dto.comment.CreateOrUpdateCommentDTO;
 
 import static org.springframework.http.MediaType.*;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
