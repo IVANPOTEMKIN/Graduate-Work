@@ -39,9 +39,9 @@ public interface AdMapper {
     @Mapping(target = "author.id", source = "dto.author")
     @Mapping(target = "image.filePath", source = "dto.image")
     @Mapping(target = "id", source = "dto.pk")
-    AdEntity toAdDTO(AdDTO dto);
+    AdEntity toAdEntity(AdDTO dto);
 
-    AdEntity toCreateOrUpdateAdDTO(CreateOrUpdateAdDTO dto);
+    AdEntity toAdEntity(CreateOrUpdateAdDTO dto);
 
     @Mapping(target = "id", source = "dto.pk")
     @Mapping(target = "author.firstName", source = "dto.authorFirstName")
@@ -49,5 +49,5 @@ public interface AdMapper {
     @Mapping(target = "author.username", source = "dto.email")
     @Mapping(target = "image.filePath", source = "dto.image")
     @Mapping(target = "author.phoneNumber", source = "dto.phone")
-    AdEntity toExtendedAdDTO(ExtendedAdDTO dto);
+    AdEntity toAdEntity(ExtendedAdDTO dto);
 }

@@ -25,7 +25,7 @@ public class AdEntity {
     private String title;
 
     @Column(name = "price")
-    private Double price;
+    private Integer price;
 
     @Column(name = "description")
     private String description;
