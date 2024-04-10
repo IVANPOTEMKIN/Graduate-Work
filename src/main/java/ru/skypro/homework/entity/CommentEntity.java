@@ -30,8 +30,7 @@ public class CommentEntity {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH,
-            CascadeType.DETACH},
-            fetch = FetchType.LAZY)
+            CascadeType.DETACH})
     @JoinColumn(name = "ad_id", nullable = false)
     private AdEntity ad;
 
@@ -39,8 +38,7 @@ public class CommentEntity {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH,
-            CascadeType.DETACH},
-            fetch = FetchType.LAZY)
+            CascadeType.DETACH})
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity author;
 

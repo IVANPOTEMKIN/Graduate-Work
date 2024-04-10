@@ -34,26 +34,6 @@ public class ImageEntity {
     @JsonIgnore
     private Byte[] data;
 
-    @OneToOne(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.DETACH},
-            fetch = FetchType.LAZY)
-    @Transient
-    @JsonIgnore
-    private UserEntity user;
-
-    @OneToOne(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.DETACH},
-            fetch = FetchType.LAZY)
-    @Transient
-    @JsonIgnore
-    private AdEntity ad;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,14 +43,12 @@ public class ImageEntity {
                 && Objects.equals(filePath, that.filePath)
                 && Objects.equals(fileSize, that.fileSize)
                 && Objects.equals(mediaType, that.mediaType)
-                && Arrays.equals(data, that.data)
-                && Objects.equals(user, that.user)
-                && Objects.equals(ad, that.ad);
+                && Arrays.equals(data, that.data);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, filePath, fileSize, mediaType, user, ad);
+        int result = Objects.hash(id, filePath, fileSize, mediaType);
         result = 31 * result + Arrays.hashCode(data);
         return result;
     }
@@ -83,8 +61,6 @@ public class ImageEntity {
                 ", fileSize=" + fileSize +
                 ", mediaType='" + mediaType + '\'' +
                 ", data=" + Arrays.toString(data) +
-                ", user=" + user +
-                ", ad=" + ad +
                 '}';
     }
 }

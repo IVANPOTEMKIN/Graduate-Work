@@ -30,17 +30,15 @@ public class AdEntity {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "image_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
     private ImageEntity image;
 
     @ManyToOne(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH,
-            CascadeType.DETACH},
-            fetch = FetchType.LAZY)
+            CascadeType.DETACH})
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity author;
 

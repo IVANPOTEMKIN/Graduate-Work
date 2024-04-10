@@ -41,9 +41,8 @@ public class UserEntity {
     @Column(name = "role")
     private Role role;
 
-    @OneToOne(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "image_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
     private ImageEntity avatar;
 
     @OneToMany(cascade = CascadeType.ALL)
