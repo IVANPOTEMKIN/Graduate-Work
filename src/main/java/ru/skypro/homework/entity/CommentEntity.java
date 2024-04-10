@@ -1,15 +1,18 @@
 package ru.skypro.homework.entity;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
-@Table(name = "comments")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@Table(name = "comments")
 public class CommentEntity {
 
     @Id
@@ -27,7 +30,8 @@ public class CommentEntity {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH,
-            CascadeType.DETACH})
+            CascadeType.DETACH},
+            fetch = FetchType.LAZY)
     @JoinColumn(name = "ad_id", nullable = false)
     private AdEntity ad;
 
@@ -35,7 +39,41 @@ public class CommentEntity {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH,
-            CascadeType.DETACH})
+            CascadeType.DETACH},
+            fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity author;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommentEntity that = (CommentEntity) o;
+        return id == that.id
+                && Objects.equals(createdAt, that.createdAt)
+                && Objects.equals(text, that.text)
+                && Objects.equals(ad, that.ad)
+                && Objects.equals(author, that.author);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                id,
+                createdAt,
+                text,
+                ad,
+                author);
+    }
+
+    @Override
+    public String toString() {
+        return "CommentEntity{" +
+                "id=" + id +
+                ", createdAt=" + createdAt +
+                ", text='" + text + '\'' +
+                ", ad=" + ad +
+                ", author=" + author +
+                '}';
+    }
 }
