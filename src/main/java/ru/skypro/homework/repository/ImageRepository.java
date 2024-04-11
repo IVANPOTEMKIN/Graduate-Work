@@ -4,6 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.skypro.homework.entity.ImageEntity;
 
+import java.util.Optional;
+
 @Repository
 public interface ImageRepository extends JpaRepository<ImageEntity, Integer> {
+
+    Optional<ImageEntity> findImageEntityByFilePath(String path);
 }

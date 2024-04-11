@@ -1,12 +1,10 @@
 package ru.skypro.homework.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.Objects;
 
 @Entity
@@ -30,10 +28,6 @@ public class ImageEntity {
     @Column(name = "type")
     private String mediaType;
 
-    @Transient
-    @JsonIgnore
-    private Byte[] data;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -42,15 +36,16 @@ public class ImageEntity {
         return Objects.equals(id, that.id)
                 && Objects.equals(filePath, that.filePath)
                 && Objects.equals(fileSize, that.fileSize)
-                && Objects.equals(mediaType, that.mediaType)
-                && Arrays.equals(data, that.data);
+                && Objects.equals(mediaType, that.mediaType);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, filePath, fileSize, mediaType);
-        result = 31 * result + Arrays.hashCode(data);
-        return result;
+        return Objects.hash(
+                id,
+                filePath,
+                fileSize,
+                mediaType);
     }
 
     @Override
@@ -60,7 +55,6 @@ public class ImageEntity {
                 ", filePath='" + filePath + '\'' +
                 ", fileSize=" + fileSize +
                 ", mediaType='" + mediaType + '\'' +
-                ", data=" + Arrays.toString(data) +
                 '}';
     }
 }

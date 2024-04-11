@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.auth.NewPasswordDTO;
@@ -14,6 +15,7 @@ import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.service.UserService;
 
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
@@ -25,6 +27,8 @@ import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
+
+    private final UserService service;
 
     @Operation(
             tags = TAG_USERS,
@@ -49,7 +53,10 @@ public class UserController {
     )
 
     @PostMapping("/set_password")
-    public ResponseEntity<?> updatePassword(@RequestBody(required = false) NewPasswordDTO dto) {
+    public ResponseEntity<?> updatePassword(@RequestBody NewPasswordDTO dto,
+                                            Authentication auth) {
+
+        service.updatePassword(dto, auth);
         return ResponseEntity.ok().build();
     }
 
@@ -74,8 +81,12 @@ public class UserController {
     )
 
     @GetMapping("/me")
-    public UserDTO getInfoAboutUser() {
-        return new UserDTO();
+    public ResponseEntity<UserDTO> getInfoAboutUser(Authentication auth) {
+
+        if (auth.isAuthenticated()) {
+            return ResponseEntity.ok(service.getInfoAboutUser(auth));
+        }
+        return ResponseEntity.status(UNAUTHORIZED).build();
     }
 
     @Operation(
@@ -99,8 +110,13 @@ public class UserController {
     )
 
     @PatchMapping("/me")
-    public UpdateUserDTO updateInfoAboutUser(@RequestBody(required = false) UpdateUserDTO dto) {
-        return new UpdateUserDTO();
+    public ResponseEntity<UpdateUserDTO> updateInfoAboutUser(@RequestBody UpdateUserDTO dto,
+                                                             Authentication auth) {
+
+        if (auth.isAuthenticated()) {
+            return ResponseEntity.ok(service.updateInfoAboutUser(dto, auth));
+        }
+        return ResponseEntity.status(UNAUTHORIZED).build();
     }
 
     @Operation(
@@ -121,7 +137,10 @@ public class UserController {
     )
 
     @PatchMapping(value = "/me/image", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateAvatarOfUser(@RequestParam MultipartFile image) {
+    public ResponseEntity<?> updateAvatarOfUser(@RequestParam MultipartFile image,
+                                                Authentication auth) {
+
+        service.updateAvatarOfUser(image, auth);
         return ResponseEntity.ok().build();
     }
 }
