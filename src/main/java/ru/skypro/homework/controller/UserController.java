@@ -15,7 +15,6 @@ import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.service.UserService;
 
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
@@ -82,11 +81,7 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getInfoAboutUser(Authentication auth) {
-
-        if (auth.isAuthenticated()) {
             return ResponseEntity.ok(service.getInfoAboutUser(auth));
-        }
-        return ResponseEntity.status(UNAUTHORIZED).build();
     }
 
     @Operation(
@@ -113,10 +108,7 @@ public class UserController {
     public ResponseEntity<UpdateUserDTO> updateInfoAboutUser(@RequestBody UpdateUserDTO dto,
                                                              Authentication auth) {
 
-        if (auth.isAuthenticated()) {
             return ResponseEntity.ok(service.updateInfoAboutUser(dto, auth));
-        }
-        return ResponseEntity.status(UNAUTHORIZED).build();
     }
 
     @Operation(

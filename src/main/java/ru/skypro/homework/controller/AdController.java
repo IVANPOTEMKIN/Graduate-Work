@@ -8,13 +8,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ad.AdDTO;
 import ru.skypro.homework.dto.ad.AdsDTO;
 import ru.skypro.homework.dto.ad.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ad.ExtendedAdDTO;
+import ru.skypro.homework.service.AdService;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.*;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
 import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
@@ -25,6 +29,8 @@ import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 @RequiredArgsConstructor
 @RequestMapping("/ads")
 public class AdController {
+
+    private final AdService service;
 
     @Operation(
             tags = TAG_ADS,
@@ -42,8 +48,8 @@ public class AdController {
     )
 
     @GetMapping
-    public AdsDTO getAllAds() {
-        return new AdsDTO();
+    public ResponseEntity<AdsDTO> getAllAds() {
+        return ResponseEntity.ok(service.getAllAds());
     }
 
     @Operation(
@@ -67,9 +73,11 @@ public class AdController {
     )
 
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
-    public AdDTO AddAd(@RequestPart CreateOrUpdateAdDTO properties,
-                       @RequestPart MultipartFile image) {
-        return new AdDTO();
+    public ResponseEntity<AdDTO> AddAd(@RequestPart CreateOrUpdateAdDTO properties,
+                                       @RequestPart(required = false) MultipartFile image,
+                                       Authentication auth) {
+
+        return ResponseEntity.status(CREATED).body(service.AddAd(properties, image, auth));
     }
 
     @Operation(
@@ -98,8 +106,8 @@ public class AdController {
     )
 
     @GetMapping("/{id}")
-    public ExtendedAdDTO getInfoAboutAd(@PathVariable int id) {
-        return new ExtendedAdDTO();
+    public ResponseEntity<ExtendedAdDTO> getInfoAboutAd(@PathVariable int id) {
+        return ResponseEntity.ok(service.getInfoAboutAd(id));
     }
 
     @Operation(
@@ -131,7 +139,8 @@ public class AdController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAd(@PathVariable int id) {
-        return ResponseEntity.ok().build();
+        service.deleteAd(id);
+        return ResponseEntity.status(NO_CONTENT).build();
     }
 
     @Operation(
@@ -165,9 +174,10 @@ public class AdController {
     )
 
     @PatchMapping("/{id}")
-    public AdDTO updateInfoAboutAd(@PathVariable int id,
-                                   @RequestBody CreateOrUpdateAdDTO dto) {
-        return new AdDTO();
+    public ResponseEntity<AdDTO> updateInfoAboutAd(@PathVariable int id,
+                                                   @RequestBody CreateOrUpdateAdDTO dto) {
+
+        return ResponseEntity.ok(service.updateInfoAboutAd(id, dto));
     }
 
     @Operation(
@@ -191,8 +201,8 @@ public class AdController {
     )
 
     @GetMapping("/me")
-    public AdsDTO getAllAdsOfUser() {
-        return new AdsDTO();
+    public ResponseEntity<AdsDTO> getAllAdsOfUser(Authentication auth) {
+        return ResponseEntity.ok(service.getAllAdsOfUser(auth));
     }
 
     @Operation(
@@ -228,8 +238,9 @@ public class AdController {
     )
 
     @PatchMapping(value = "/{id}/image", consumes = MULTIPART_FORM_DATA_VALUE)
-    public String updateImageOfAd(@PathVariable int id,
-                                  @RequestPart MultipartFile image) {
-        return "abc";
+    public ResponseEntity<String> updateImageOfAd(@PathVariable int id,
+                                                  @RequestPart MultipartFile image) {
+
+        return ResponseEntity.ok(service.updateImageOfAd(id, image));
     }
 }

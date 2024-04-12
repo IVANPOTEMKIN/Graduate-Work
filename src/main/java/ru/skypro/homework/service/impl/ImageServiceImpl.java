@@ -12,6 +12,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.Random;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -19,7 +20,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
-    private final ImageRepository repository;
+    private final ImageRepository imageRepository;
 
     @Value("${images.folder}")
     private String dir;
@@ -46,18 +47,21 @@ public class ImageServiceImpl implements ImageService {
 
     private ImageEntity saveImage(MultipartFile file, Path path) {
 
-        ImageEntity image = repository.findImageEntityByFilePath(path.toString())
+        ImageEntity image = imageRepository.findImageEntityByFilePath(path.toString())
                 .orElse(new ImageEntity());
 
         image.setFilePath(path.toString());
         image.setFileSize(file.getSize());
         image.setMediaType(file.getContentType());
 
-        return repository.save(image);
+        return imageRepository.save(image);
     }
 
     private Path createPath(MultipartFile file) {
-        return Path.of(dir, file.getName().hashCode() * file.getSize() + "." + getExtensions(Objects.requireNonNull(file.getOriginalFilename())));
+        Random random = new Random();
+        return Path.of(dir, file.getName().hashCode() * file.getSize() * random.nextInt(100)
+                + "."
+                + getExtensions(Objects.requireNonNull(file.getOriginalFilename())));
     }
 
     private String getExtensions(String fileName) {

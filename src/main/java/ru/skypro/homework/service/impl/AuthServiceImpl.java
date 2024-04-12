@@ -17,15 +17,15 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
-    private final UserRepository repository;
+    private final UserRepository userRepository;
 
     public AuthServiceImpl(UserDetailsManager manager,
                            PasswordEncoder passwordEncoder,
-                           UserRepository repository) {
+                           UserRepository userRepository) {
 
         this.manager = manager;
         this.encoder = passwordEncoder;
-        this.repository = repository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -54,8 +54,8 @@ public class AuthServiceImpl implements AuthService {
                         .roles(register.getRole().name())
                         .build());
 
-        UserEntity user = INSTANCE.toUserEntity(register);
-        repository.save(user);
+        UserEntity userEntity = INSTANCE.toUserEntity(register);
+        userRepository.save(userEntity);
         return true;
     }
 }

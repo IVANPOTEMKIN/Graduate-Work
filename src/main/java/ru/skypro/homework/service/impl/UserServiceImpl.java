@@ -21,56 +21,62 @@ import static ru.skypro.homework.mapper.UserMapper.INSTANCE;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repository;
-    private final ImageService service;
+    private final UserRepository userRepository;
+    private final ImageService imageService;
 
     @Override
     public void updatePassword(NewPasswordDTO dto,
                                Authentication auth) {
 
-        UserEntity entity = getUser(auth.getName());
-        entity.setPassword(dto.getNewPassword());
-        repository.save(entity);
+        UserEntity userEntity = getUser(auth.getName());
+        userEntity.setPassword(dto.getNewPassword());
+        userRepository.save(userEntity);
     }
 
     @Override
     public UserDTO getInfoAboutUser(Authentication auth) {
-        UserEntity entity = getUser(auth.getName());
-        return INSTANCE.toUserDTO(entity);
+        UserEntity userEntity = getUser(auth.getName());
+        return INSTANCE.toUserDTO(userEntity);
     }
 
     @Override
     public UpdateUserDTO updateInfoAboutUser(UpdateUserDTO dto,
                                              Authentication auth) {
 
-        UserEntity entity = getUser(auth.getName());
+        UserEntity userEntity = getUser(auth.getName());
 
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-        entity.setPhoneNumber(dto.getPhone());
+        userEntity.setFirstName(dto.getFirstName());
+        userEntity.setLastName(dto.getLastName());
+        userEntity.setPhoneNumber(dto.getPhone());
 
-        repository.save(entity);
-        return INSTANCE.toUpdateUserDTO(entity);
+        userRepository.save(userEntity);
+        return INSTANCE.toUpdateUserDTO(userEntity);
     }
 
     @Override
     public void updateAvatarOfUser(MultipartFile image,
                                    Authentication auth) {
 
-        UserEntity user = getUser(auth.getName());
+        UserEntity userEntity = getUser(auth.getName());
+        ImageEntity avatar = getAvatar(image);
+
+        userEntity.setAvatar(avatar);
+        userRepository.save(userEntity);
+    }
+
+    private ImageEntity getAvatar(MultipartFile image) {
         ImageEntity avatar;
 
         try {
-            avatar = service.saveFile(image);
+            avatar = imageService.saveFile(image);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        user.setAvatar(avatar);
-        repository.save(user);
+        return avatar;
     }
 
-    private UserEntity getUser(String username) {
-        return repository.findUserEntityByUsername(username).orElseThrow();
+    @Override
+    public UserEntity getUser(String username) {
+        return userRepository.findUserEntityByUsername(username).orElseThrow();
     }
 }
