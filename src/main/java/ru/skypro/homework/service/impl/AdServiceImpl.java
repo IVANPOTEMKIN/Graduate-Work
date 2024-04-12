@@ -98,6 +98,11 @@ public class AdServiceImpl implements AdService {
         return imageEntity.getFilePath();
     }
 
+    @Override
+    public AdEntity getById(int id) {
+        return adRepository.findById(id).orElseThrow();
+    }
+
     private ImageEntity getImage(MultipartFile image) {
         ImageEntity imageEntity;
 
@@ -107,9 +112,5 @@ public class AdServiceImpl implements AdService {
             throw new RuntimeException(e);
         }
         return imageEntity;
-    }
-
-    private AdEntity getById(int id) {
-        return adRepository.findById(id).orElseThrow();
     }
 }

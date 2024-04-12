@@ -7,10 +7,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.comment.CommentDTO;
 import ru.skypro.homework.dto.comment.CommentsDTO;
 import ru.skypro.homework.dto.comment.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.service.CommentService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
@@ -23,6 +25,8 @@ import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 @RequiredArgsConstructor
 @RequestMapping("/ads")
 public class CommentController {
+
+    private final CommentService service;
 
     @Operation(
             tags = TAG_COMMENTS,
@@ -50,8 +54,8 @@ public class CommentController {
     )
 
     @GetMapping("/{id}/comments")
-    public CommentsDTO getAllCommentsOfAd(@PathVariable int id) {
-        return new CommentsDTO();
+    public ResponseEntity<CommentsDTO> getAllCommentsOfAd(@PathVariable int id) {
+        return ResponseEntity.ok(service.getAllCommentsOfAd(id));
     }
 
     @Operation(
@@ -80,9 +84,11 @@ public class CommentController {
     )
 
     @PostMapping("/{id}/comments")
-    public CommentDTO addCommentToAd(@PathVariable int id,
-                                     @RequestBody CreateOrUpdateCommentDTO dto) {
-        return new CommentDTO();
+    public ResponseEntity<CommentDTO> addCommentToAd(@PathVariable int id,
+                                                     @RequestBody CreateOrUpdateCommentDTO dto,
+                                                     Authentication auth) {
+
+        return ResponseEntity.ok(service.addCommentToAd(id, dto, auth));
     }
 
     @Operation(
@@ -115,6 +121,8 @@ public class CommentController {
     @DeleteMapping("/{adid}/comments/{commentid}")
     public ResponseEntity<?> deleteComment(@PathVariable int adid,
                                            @PathVariable int commentid) {
+
+        service.deleteComment(adid, commentid);
         return ResponseEntity.ok().build();
     }
 
@@ -149,9 +157,10 @@ public class CommentController {
     )
 
     @PatchMapping("/{adid}/comments/{commentid}")
-    public CommentDTO updateComment(@PathVariable int adid,
-                                    @PathVariable int commentid,
-                                    @RequestBody CreateOrUpdateCommentDTO dto) {
-        return new CommentDTO();
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable int adid,
+                                                    @PathVariable int commentid,
+                                                    @RequestBody CreateOrUpdateCommentDTO dto) {
+
+        return ResponseEntity.ok(service.updateComment(adid, commentid, dto));
     }
 }

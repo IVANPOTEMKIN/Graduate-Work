@@ -18,7 +18,7 @@ public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -47,7 +47,7 @@ public class CommentEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CommentEntity that = (CommentEntity) o;
-        return id == that.id
+        return Objects.equals(id, that.id)
                 && Objects.equals(createdAt, that.createdAt)
                 && Objects.equals(text, that.text)
                 && Objects.equals(ad, that.ad)
