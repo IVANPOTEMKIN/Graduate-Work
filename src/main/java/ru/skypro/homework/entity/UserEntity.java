@@ -42,8 +42,8 @@ public class UserEntity {
     private Role role;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
-    private ImageEntity avatar;
+    @JoinColumn(name = "avatar_id")
+    private AvatarEntity avatar;
 
     @OneToMany(cascade = CascadeType.ALL)
     @Transient

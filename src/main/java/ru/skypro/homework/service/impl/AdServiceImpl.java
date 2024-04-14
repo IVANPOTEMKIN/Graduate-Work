@@ -16,6 +16,7 @@ import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +33,8 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public AdsDTO getAllAds() {
-        List<AdDTO> dtoList = adRepository.findAll().stream()
+        List<AdDTO> dtoList = adRepository.findAll()
+                .stream()
                 .map(INSTANCE::toAdDTO)
                 .collect(Collectors.toList());
 
@@ -42,6 +44,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public AdDTO AddAd(CreateOrUpdateAdDTO properties,
                        MultipartFile image,
+                       HttpServletResponse response,
                        Authentication auth) {
 
         AdEntity adEntity = INSTANCE.toAdEntity(properties);
@@ -52,6 +55,8 @@ public class AdServiceImpl implements AdService {
         adEntity.setImage(imageEntity);
 
         adRepository.save(adEntity);
+        downloadImage(response, imageEntity);
+
         return INSTANCE.toAdDTO(adEntity);
     }
 
@@ -79,22 +84,25 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public AdsDTO getAllAdsOfUser(Authentication auth) {
-        UserEntity userEntity = userService.getUser(auth.getName());
-
-        List<AdDTO> dtoList = adRepository.findAll().stream()
+        List<AdDTO> dtoList = adRepository.findAdEntitiesByAuthor_Username(auth.getName())
+                .stream()
                 .map(INSTANCE::toAdDTO)
-                .filter(ad -> ad.getAuthor().equals(userEntity.getId()))
                 .collect(Collectors.toList());
 
         return new AdsDTO(dtoList.size(), dtoList);
     }
 
     @Override
-    public String updateImageOfAd(int id, MultipartFile image) {
+    public String updateImageOfAd(int id, MultipartFile image,
+                                  HttpServletResponse response) {
+
         AdEntity adEntity = getById(id);
         ImageEntity imageEntity = getImage(image);
         adEntity.setImage(imageEntity);
+
         adRepository.save(adEntity);
+        downloadImage(response, imageEntity);
+
         return imageEntity.getFilePath();
     }
 
@@ -107,10 +115,20 @@ public class AdServiceImpl implements AdService {
         ImageEntity imageEntity;
 
         try {
-            imageEntity = imageService.saveFile(image);
+            imageEntity = imageService.saveImage(image);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return imageEntity;
+    }
+
+    private void downloadImage(HttpServletResponse response,
+                               ImageEntity imageEntity) {
+
+        try {
+            imageService.downloadFromDirectory(response, imageEntity.getFilePath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

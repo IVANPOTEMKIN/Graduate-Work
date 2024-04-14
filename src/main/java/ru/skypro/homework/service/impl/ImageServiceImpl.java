@@ -8,44 +8,31 @@ import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.ImageService;
 
-import java.io.*;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
-import java.util.Random;
-
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 @RequiredArgsConstructor
-public class ImageServiceImpl implements ImageService {
+public class ImageServiceImpl extends GeneralImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
 
     @Value("${images.folder}")
-    private String dir;
+    private String directory;
 
     @Override
-    public ImageEntity saveFile(MultipartFile file) throws IOException {
-
-        Path path = createPath(file);
-
-        Files.createDirectories(path.getParent());
-        Files.deleteIfExists(path);
-
-        try (
-                InputStream is = file.getInputStream();
-                OutputStream os = Files.newOutputStream(path, CREATE_NEW);
-                BufferedInputStream bis = new BufferedInputStream(is, 1024);
-                BufferedOutputStream bos = new BufferedOutputStream(os, 1024)) {
-
-            bis.transferTo(bos);
-        }
-
-        return saveImage(file, path);
+    public ImageEntity saveImage(MultipartFile file) throws IOException {
+        Path path = savePath(file, directory);
+        return saveToDB(file, path);
     }
 
-    private ImageEntity saveImage(MultipartFile file, Path path) {
+    @Override
+    public ImageEntity saveToDB(MultipartFile file,
+                                Path path) throws IOException {
 
         ImageEntity image = imageRepository.findImageEntityByFilePath(path.toString())
                 .orElse(new ImageEntity());
@@ -53,18 +40,28 @@ public class ImageServiceImpl implements ImageService {
         image.setFilePath(path.toString());
         image.setFileSize(file.getSize());
         image.setMediaType(file.getContentType());
+        image.setData(file.getBytes());
 
         return imageRepository.save(image);
     }
 
-    private Path createPath(MultipartFile file) {
-        Random random = new Random();
-        return Path.of(dir, file.getName().hashCode() * file.getSize() * random.nextInt(100)
-                + "."
-                + getExtensions(Objects.requireNonNull(file.getOriginalFilename())));
+    @Override
+    public void downloadFromDirectory(HttpServletResponse response,
+                                      String path) throws IOException {
+
+        ImageEntity image = getImage(path);
+        Path from = Path.of(image.getFilePath());
+
+        try (InputStream is = Files.newInputStream(from);
+             OutputStream os = response.getOutputStream()) {
+            response.setStatus(200);
+            response.setContentType(image.getMediaType());
+            response.setContentLength(image.getFileSize().intValue());
+            is.transferTo(os);
+        }
     }
 
-    private String getExtensions(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
+    private ImageEntity getImage(String path) {
+        return imageRepository.findImageEntityByFilePath(path).orElseThrow();
     }
 }

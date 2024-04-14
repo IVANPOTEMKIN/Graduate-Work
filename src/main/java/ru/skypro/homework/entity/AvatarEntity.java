@@ -13,8 +13,8 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "images")
-public class ImageEntity {
+@Table(name = "avatars")
+public class AvatarEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,7 @@ public class ImageEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ImageEntity that = (ImageEntity) o;
+        AvatarEntity that = (AvatarEntity) o;
         return Objects.equals(id, that.id)
                 && Objects.equals(filePath, that.filePath)
                 && Objects.equals(fileSize, that.fileSize)
@@ -55,7 +55,7 @@ public class ImageEntity {
 
     @Override
     public String toString() {
-        return "ImageEntity{" +
+        return "AvatarEntity{" +
                 "id=" + id +
                 ", filePath='" + filePath + '\'' +
                 ", fileSize=" + fileSize +

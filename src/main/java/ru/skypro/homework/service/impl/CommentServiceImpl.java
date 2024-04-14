@@ -30,9 +30,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentsDTO getAllCommentsOfAd(int id) {
-        AdEntity adEntity = adService.getById(id);
-
-        List<CommentDTO> dtoList = adEntity.getComments().stream()
+        List<CommentDTO> dtoList = commentRepository.findCommentEntitiesByAd_Id(id)
+                .stream()
                 .map(INSTANCE::toCommentDTO)
                 .collect(Collectors.toList());
 
@@ -57,11 +56,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment(int idAd, int idComment) {
-        AdEntity adEntity = adService.getById(idAd);
-        CommentEntity commentEntity = getById(idComment);
+        List<CommentEntity> entities = commentRepository.findCommentEntitiesByAd_Id(idAd);
 
-        for (CommentEntity comment : adEntity.getComments()) {
-            if (comment.equals(commentEntity)) {
+        for (CommentEntity comment : entities) {
+            if (comment.getId().equals(idComment)) {
                 commentRepository.delete(comment);
             }
         }
@@ -71,17 +69,17 @@ public class CommentServiceImpl implements CommentService {
     public CommentDTO updateComment(int idAd, int idComment,
                                     CreateOrUpdateCommentDTO dto) {
 
-        AdEntity adEntity = adService.getById(idAd);
-        CommentEntity commentEntity = getById(idComment);
+        List<CommentEntity> entities = commentRepository.findCommentEntitiesByAd_Id(idAd);
 
-        for (CommentEntity comment : adEntity.getComments()) {
-            if (comment.equals(commentEntity)) {
+        for (CommentEntity comment : entities) {
+            if (comment.getId().equals(idComment)) {
                 comment.setText(dto.getText());
+                comment.setCreatedAt(now());
                 commentRepository.save(comment);
+                return INSTANCE.toCommentDTO(comment);
             }
         }
-
-        return INSTANCE.toCommentDTO(commentEntity);
+        return null;
     }
 
     @Override

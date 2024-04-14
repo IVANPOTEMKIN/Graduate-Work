@@ -17,6 +17,8 @@ import ru.skypro.homework.dto.ad.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ad.ExtendedAdDTO;
 import ru.skypro.homework.service.AdService;
 
+import javax.servlet.http.HttpServletResponse;
+
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.*;
@@ -74,10 +76,11 @@ public class AdController {
 
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdDTO> AddAd(@RequestPart CreateOrUpdateAdDTO properties,
-                                       @RequestPart(required = false) MultipartFile image,
+                                       @RequestPart MultipartFile image,
+                                       HttpServletResponse response,
                                        Authentication auth) {
 
-        return ResponseEntity.status(CREATED).body(service.AddAd(properties, image, auth));
+        return ResponseEntity.status(CREATED).body(service.AddAd(properties, image, response, auth));
     }
 
     @Operation(
@@ -239,8 +242,9 @@ public class AdController {
 
     @PatchMapping(value = "/{id}/image", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateImageOfAd(@PathVariable int id,
-                                                  @RequestPart MultipartFile image) {
+                                                  @RequestPart MultipartFile image,
+                                                  HttpServletResponse response) {
 
-        return ResponseEntity.ok(service.updateImageOfAd(id, image));
+        return ResponseEntity.ok(service.updateImageOfAd(id, image, response));
     }
 }
