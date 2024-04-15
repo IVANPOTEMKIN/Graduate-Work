@@ -1,19 +1,14 @@
 package ru.skypro.homework.service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.ImageEntity;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.nio.file.Path;
-
 public interface ImageService {
 
-    ImageEntity saveImage(MultipartFile file) throws IOException;
+    ImageEntity saveImage(MultipartFile file);
 
-    ImageEntity saveToDB(MultipartFile file,
-                         Path path) throws IOException;
+    ResponseEntity<byte[]> downloadImage(int id);
 
-    void downloadFromDirectory(HttpServletResponse response,
-                               String path) throws IOException;
+    void deleteImage(int id);
 }

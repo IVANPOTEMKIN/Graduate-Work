@@ -8,80 +8,66 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.auth.NewPasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
-import ru.skypro.homework.entity.AvatarEntity;
+import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exception.UserNotFoundException;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
-import ru.skypro.homework.service.AvatarService;
+import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-import static ru.skypro.homework.mapper.UserMapper.INSTANCE;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final AvatarService avatarService;
+    private final UserRepository repository;
+    private final ImageService service;
+    private final UserMapper mapper;
 
     @Override
-    public void updatePassword(NewPasswordDTO dto,
-                               Authentication auth) {
+    public ResponseEntity<?> updatePassword(NewPasswordDTO dto,
+                                            Authentication auth) {
 
-        UserEntity userEntity = getUser(auth.getName());
-        userEntity.setPassword(dto.getNewPassword());
-        userRepository.save(userEntity);
+        UserEntity user = getUser(auth.getName());
+        user.setPassword(dto.getNewPassword());
+        repository.save(user);
+        return ResponseEntity.ok().build();
     }
 
     @Override
-    public UserDTO getInfoAboutUser(Authentication auth) {
-        UserEntity userEntity = getUser(auth.getName());
-        return INSTANCE.toUserDTO(userEntity);
+    public ResponseEntity<UserDTO> getInfoAboutUser(Authentication auth) {
+        UserEntity user = getUser(auth.getName());
+        return ResponseEntity.ok(mapper.toUserDTO(user));
     }
 
     @Override
-    public UpdateUserDTO updateInfoAboutUser(UpdateUserDTO dto,
-                                             Authentication auth) {
+    public ResponseEntity<UpdateUserDTO> updateInfoAboutUser(UpdateUserDTO dto,
+                                                             Authentication auth) {
 
-        UserEntity userEntity = getUser(auth.getName());
+        UserEntity user = getUser(auth.getName());
 
-        userEntity.setFirstName(dto.getFirstName());
-        userEntity.setLastName(dto.getLastName());
-        userEntity.setPhoneNumber(dto.getPhone());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setPhoneNumber(dto.getPhone());
 
-        userRepository.save(userEntity);
-        return INSTANCE.toUpdateUserDTO(userEntity);
+        repository.save(user);
+        return ResponseEntity.ok(mapper.toUpdateUserDTO(user));
     }
 
     @Override
-    public ResponseEntity<byte[]> updateAvatarOfUser(MultipartFile file,
-                                                     HttpServletResponse response,
-                                                     Authentication auth) {
+    public ResponseEntity<?> updateAvatarOfUser(MultipartFile file,
+                                                Authentication auth) {
 
-        UserEntity userEntity = getUser(auth.getName());
-        AvatarEntity avatar = getAvatar(file);
-
-        userEntity.setAvatar(avatar);
-        userRepository.save(userEntity);
-        return avatarService.downloadFromDB(avatar.getFilePath());
-    }
-
-    private AvatarEntity getAvatar(MultipartFile file) {
-        AvatarEntity avatar;
-
-        try {
-            avatar = avatarService.saveAvatar(file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return avatar;
+        UserEntity user = getUser(auth.getName());
+        ImageEntity avatar = service.saveImage(file);
+        user.setAvatar(avatar);
+        repository.save(user);
+        return ResponseEntity.ok().build();
     }
 
     @Override
     public UserEntity getUser(String username) {
-        return userRepository.findUserEntityByUsername(username).orElseThrow();
+        return repository.findUserEntityByUsername(username)
+                .orElseThrow(UserNotFoundException::new);
     }
 }

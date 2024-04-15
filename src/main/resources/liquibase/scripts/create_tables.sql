@@ -1,14 +1,6 @@
 -- liquibase formatted sql
 
 -- changeset ivan:1
-CREATE TABLE avatars
-(
-    id   INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    path VARCHAR(255),
-    size BIGINT,
-    type VARCHAR(255)
-);
-
 CREATE TABLE images
 (
     id   INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -26,7 +18,7 @@ CREATE TABLE users
     phone_number VARCHAR(255),
     role         VARCHAR(255),
     username     VARCHAR(255),
-    avatar_id    INTEGER REFERENCES avatars
+    avatar_id    INTEGER REFERENCES images
 );
 
 CREATE TABLE ads

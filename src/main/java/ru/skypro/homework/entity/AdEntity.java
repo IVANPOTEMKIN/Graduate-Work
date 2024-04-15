@@ -18,7 +18,7 @@ public class AdEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "title")
@@ -30,20 +30,15 @@ public class AdEntity {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "image_id")
     private ImageEntity image;
 
-    @ManyToOne(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.DETACH})
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private UserEntity author;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @Transient
+    @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<CommentEntity> comments;
 

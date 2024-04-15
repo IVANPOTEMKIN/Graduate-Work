@@ -19,7 +19,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "username")
@@ -41,17 +41,15 @@ public class UserEntity {
     @Column(name = "role")
     private Role role;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "avatar_id")
-    private AvatarEntity avatar;
+    private ImageEntity avatar;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @Transient
+    @OneToMany(mappedBy = "author")
     @JsonIgnore
     private List<AdEntity> ads;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @Transient
+    @OneToMany(mappedBy = "author")
     @JsonIgnore
     private List<CommentEntity> comments;
 

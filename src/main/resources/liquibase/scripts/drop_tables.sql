@@ -5,4 +5,3 @@ DROP TABLE comments;
 DROP TABLE ads;
 DROP TABLE users;
 DROP TABLE images;
-DROP TABLE avatars;

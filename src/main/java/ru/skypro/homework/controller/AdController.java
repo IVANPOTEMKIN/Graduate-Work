@@ -17,10 +17,6 @@ import ru.skypro.homework.dto.ad.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ad.ExtendedAdDTO;
 import ru.skypro.homework.service.AdService;
 
-import javax.servlet.http.HttpServletResponse;
-
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.*;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
 import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
@@ -51,7 +47,7 @@ public class AdController {
 
     @GetMapping
     public ResponseEntity<AdsDTO> getAllAds() {
-        return ResponseEntity.ok(service.getAllAds());
+        return service.getAllAds();
     }
 
     @Operation(
@@ -77,10 +73,9 @@ public class AdController {
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdDTO> AddAd(@RequestPart CreateOrUpdateAdDTO properties,
                                        @RequestPart MultipartFile image,
-                                       HttpServletResponse response,
                                        Authentication auth) {
 
-        return ResponseEntity.status(CREATED).body(service.AddAd(properties, image, response, auth));
+        return service.AddAd(properties, image, auth);
     }
 
     @Operation(
@@ -110,7 +105,7 @@ public class AdController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAdDTO> getInfoAboutAd(@PathVariable int id) {
-        return ResponseEntity.ok(service.getInfoAboutAd(id));
+        return service.getInfoAboutAd(id);
     }
 
     @Operation(
@@ -142,8 +137,7 @@ public class AdController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAd(@PathVariable int id) {
-        service.deleteAd(id);
-        return ResponseEntity.status(NO_CONTENT).build();
+        return service.deleteAd(id);
     }
 
     @Operation(
@@ -180,7 +174,7 @@ public class AdController {
     public ResponseEntity<AdDTO> updateInfoAboutAd(@PathVariable int id,
                                                    @RequestBody CreateOrUpdateAdDTO dto) {
 
-        return ResponseEntity.ok(service.updateInfoAboutAd(id, dto));
+        return service.updateInfoAboutAd(id, dto);
     }
 
     @Operation(
@@ -205,7 +199,7 @@ public class AdController {
 
     @GetMapping("/me")
     public ResponseEntity<AdsDTO> getAllAdsOfUser(Authentication auth) {
-        return ResponseEntity.ok(service.getAllAdsOfUser(auth));
+        return service.getAllAdsOfUser(auth);
     }
 
     @Operation(
@@ -242,9 +236,8 @@ public class AdController {
 
     @PatchMapping(value = "/{id}/image", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateImageOfAd(@PathVariable int id,
-                                                  @RequestPart MultipartFile image,
-                                                  HttpServletResponse response) {
+                                                  @RequestPart MultipartFile image) {
 
-        return ResponseEntity.ok(service.updateImageOfAd(id, image, response));
+        return service.updateImageOfAd(id, image);
     }
 }

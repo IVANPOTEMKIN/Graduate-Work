@@ -17,7 +17,7 @@ public class CommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "created_at")
@@ -26,20 +26,12 @@ public class CommentEntity {
     @Column(name = "text")
     private String text;
 
-    @ManyToOne(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.DETACH})
-    @JoinColumn(name = "ad_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "ad_id")
     private AdEntity ad;
 
-    @ManyToOne(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.DETACH})
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private UserEntity author;
 
     @Override

@@ -15,7 +15,6 @@ import ru.skypro.homework.dto.comment.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.service.CommentService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
 import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 
@@ -36,7 +35,7 @@ public class CommentController {
                             responseCode = CODE_200,
                             description = DESCRIPTION_CODE_200,
                             content = @Content(
-                                    mediaType = APPLICATION_OCTET_STREAM_VALUE,
+                                    mediaType = APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = CommentsDTO.class)
                             )
                     ),
@@ -55,7 +54,7 @@ public class CommentController {
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<CommentsDTO> getAllCommentsOfAd(@PathVariable int id) {
-        return ResponseEntity.ok(service.getAllCommentsOfAd(id));
+        return service.getAllCommentsOfAd(id);
     }
 
     @Operation(
@@ -66,7 +65,7 @@ public class CommentController {
                             responseCode = CODE_200,
                             description = DESCRIPTION_CODE_200,
                             content = @Content(
-                                    mediaType = APPLICATION_OCTET_STREAM_VALUE,
+                                    mediaType = APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = CommentDTO.class)
                             )
                     ),
@@ -88,7 +87,7 @@ public class CommentController {
                                                      @RequestBody CreateOrUpdateCommentDTO dto,
                                                      Authentication auth) {
 
-        return ResponseEntity.ok(service.addCommentToAd(id, dto, auth));
+        return service.addCommentToAd(id, dto, auth);
     }
 
     @Operation(
@@ -122,8 +121,7 @@ public class CommentController {
     public ResponseEntity<?> deleteComment(@PathVariable int adid,
                                            @PathVariable int commentid) {
 
-        service.deleteComment(adid, commentid);
-        return ResponseEntity.ok().build();
+        return service.deleteComment(adid, commentid);
     }
 
     @Operation(
@@ -161,6 +159,6 @@ public class CommentController {
                                                     @PathVariable int commentid,
                                                     @RequestBody CreateOrUpdateCommentDTO dto) {
 
-        return ResponseEntity.ok(service.updateComment(adid, commentid, dto));
+        return service.updateComment(adid, commentid, dto);
     }
 }

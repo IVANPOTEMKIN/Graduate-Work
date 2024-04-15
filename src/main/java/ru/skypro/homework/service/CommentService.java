@@ -1,22 +1,20 @@
 package ru.skypro.homework.service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import ru.skypro.homework.dto.comment.CommentDTO;
 import ru.skypro.homework.dto.comment.CommentsDTO;
 import ru.skypro.homework.dto.comment.CreateOrUpdateCommentDTO;
-import ru.skypro.homework.entity.CommentEntity;
 
 public interface CommentService {
 
-    CommentsDTO getAllCommentsOfAd(int id);
+    ResponseEntity<CommentsDTO> getAllCommentsOfAd(int id);
 
-    CommentDTO addCommentToAd(int id, CreateOrUpdateCommentDTO dto,
-                              Authentication auth);
+    ResponseEntity<CommentDTO> addCommentToAd(int id, CreateOrUpdateCommentDTO dto,
+                                              Authentication auth);
 
-    void deleteComment(int idAd, int idComment);
+    ResponseEntity<?> deleteComment(int idAd, int idComment);
 
-    CommentDTO updateComment(int idAd, int idComment,
-                             CreateOrUpdateCommentDTO dto);
-
-    CommentEntity getById(int id);
+    ResponseEntity<CommentDTO> updateComment(int idAd, int idComment,
+                                             CreateOrUpdateCommentDTO dto);
 }

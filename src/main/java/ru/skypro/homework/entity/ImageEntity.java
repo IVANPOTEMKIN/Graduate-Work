@@ -18,17 +18,17 @@ public class ImageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "path")
-    private String filePath;
+    private String path;
 
     @Column(name = "size")
-    private Long fileSize;
+    private Long size;
 
     @Column(name = "type")
-    private String mediaType;
+    private String type;
 
     @Transient
     @JsonIgnore
@@ -38,17 +38,17 @@ public class ImageEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ImageEntity that = (ImageEntity) o;
-        return Objects.equals(id, that.id)
-                && Objects.equals(filePath, that.filePath)
-                && Objects.equals(fileSize, that.fileSize)
-                && Objects.equals(mediaType, that.mediaType)
-                && Arrays.equals(data, that.data);
+        ImageEntity image = (ImageEntity) o;
+        return Objects.equals(id, image.id)
+                && Objects.equals(path, image.path)
+                && Objects.equals(size, image.size)
+                && Objects.equals(type, image.type)
+                && Arrays.equals(data, image.data);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, filePath, fileSize, mediaType);
+        int result = Objects.hash(id, path, size, type);
         result = 31 * result + Arrays.hashCode(data);
         return result;
     }
@@ -57,9 +57,9 @@ public class ImageEntity {
     public String toString() {
         return "ImageEntity{" +
                 "id=" + id +
-                ", filePath='" + filePath + '\'' +
-                ", fileSize=" + fileSize +
-                ", mediaType='" + mediaType + '\'' +
+                ", path='" + path + '\'' +
+                ", size=" + size +
+                ", type='" + type + '\'' +
                 ", data=" + Arrays.toString(data) +
                 '}';
     }
