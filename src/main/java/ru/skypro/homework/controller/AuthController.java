@@ -31,8 +31,8 @@ public class AuthController {
             summary = AUTHORIZATION_USER,
             responses = {
                     @ApiResponse(
-                            responseCode = CODE_201,
-                            description = DESCRIPTION_CODE_201,
+                            responseCode = CODE_200,
+                            description = DESCRIPTION_CODE_200,
                             content = @Content()
                     ),
                     @ApiResponse(
@@ -44,7 +44,7 @@ public class AuthController {
     )
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody(required = false) LoginDTO login) {
+    public ResponseEntity<?> login(@RequestBody LoginDTO login) {
 
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
@@ -59,8 +59,8 @@ public class AuthController {
             summary = REGISTRATION_USER,
             responses = {
                     @ApiResponse(
-                            responseCode = CODE_200,
-                            description = DESCRIPTION_CODE_200,
+                            responseCode = CODE_201,
+                            description = DESCRIPTION_CODE_201,
                             content = @Content()
                     ),
                     @ApiResponse(
@@ -72,7 +72,7 @@ public class AuthController {
     )
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody(required = false) RegisterDTO register) {
+    public ResponseEntity<?> register(@RequestBody RegisterDTO register) {
 
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();

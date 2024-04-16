@@ -5,24 +5,30 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ad.AdDTO;
 import ru.skypro.homework.dto.ad.AdsDTO;
 import ru.skypro.homework.dto.ad.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ad.ExtendedAdDTO;
-import ru.skypro.homework.dto.comment.CommentDTO;
-import ru.skypro.homework.dto.comment.CommentsDTO;
-import ru.skypro.homework.dto.comment.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.service.AdService;
 
 import static org.springframework.http.MediaType.*;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
 import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 
+@Slf4j
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/ads")
 public class AdController {
+
+    private final AdService service;
 
     @Operation(
             tags = TAG_ADS,
@@ -40,8 +46,8 @@ public class AdController {
     )
 
     @GetMapping
-    public AdsDTO getAllAds() {
-        return new AdsDTO();
+    public ResponseEntity<AdsDTO> getAllAds() {
+        return service.getAllAds();
     }
 
     @Operation(
@@ -65,9 +71,11 @@ public class AdController {
     )
 
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
-    public AdDTO AddAd(@RequestPart CreateOrUpdateAdDTO properties,
-                       @RequestPart MultipartFile image) {
-        return new AdDTO();
+    public ResponseEntity<AdDTO> AddAd(@RequestPart CreateOrUpdateAdDTO properties,
+                                       @RequestPart MultipartFile image,
+                                       Authentication auth) {
+
+        return service.AddAd(properties, image, auth);
     }
 
     @Operation(
@@ -96,8 +104,8 @@ public class AdController {
     )
 
     @GetMapping("/{id}")
-    public ExtendedAdDTO getInfoAboutAd(@PathVariable int id) {
-        return new ExtendedAdDTO();
+    public ResponseEntity<ExtendedAdDTO> getInfoAboutAd(@PathVariable int id) {
+        return service.getInfoAboutAd(id);
     }
 
     @Operation(
@@ -129,7 +137,7 @@ public class AdController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAd(@PathVariable int id) {
-        return ResponseEntity.ok().build();
+        return service.deleteAd(id);
     }
 
     @Operation(
@@ -163,9 +171,10 @@ public class AdController {
     )
 
     @PatchMapping("/{id}")
-    public AdDTO updateInfoAboutAd(@PathVariable int id,
-                                   @RequestBody CreateOrUpdateAdDTO dto) {
-        return new AdDTO();
+    public ResponseEntity<AdDTO> updateInfoAboutAd(@PathVariable int id,
+                                                   @RequestBody CreateOrUpdateAdDTO dto) {
+
+        return service.updateInfoAboutAd(id, dto);
     }
 
     @Operation(
@@ -189,8 +198,8 @@ public class AdController {
     )
 
     @GetMapping("/me")
-    public AdsDTO getAllAdsOfUser() {
-        return new AdsDTO();
+    public ResponseEntity<AdsDTO> getAllAdsOfUser(Authentication auth) {
+        return service.getAllAdsOfUser(auth);
     }
 
     @Operation(
@@ -226,8 +235,9 @@ public class AdController {
     )
 
     @PatchMapping(value = "/{id}/image", consumes = MULTIPART_FORM_DATA_VALUE)
-    public String updateImageOfAd(@PathVariable int id,
-                                  @RequestPart MultipartFile image) {
-        return "abc";
+    public ResponseEntity<String> updateImageOfAd(@PathVariable int id,
+                                                  @RequestPart MultipartFile image) {
+
+        return service.updateImageOfAd(id, image);
     }
 }
