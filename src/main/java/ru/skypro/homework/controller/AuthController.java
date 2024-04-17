@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +14,7 @@ import ru.skypro.homework.dto.auth.LoginDTO;
 import ru.skypro.homework.dto.auth.RegisterDTO;
 import ru.skypro.homework.service.AuthService;
 
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
 import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 
@@ -36,21 +36,36 @@ public class AuthController {
                             content = @Content()
                     ),
                     @ApiResponse(
+                            responseCode = CODE_400,
+                            description = DESCRIPTION_CODE_400,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
                             responseCode = CODE_401,
                             description = DESCRIPTION_CODE_401,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_404,
+                            description = DESCRIPTION_CODE_404,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
                             content = @Content()
                     )
             }
     )
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO login) {
+    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
 
-        if (authService.login(login.getUsername(), login.getPassword())) {
+        if (authService.login(dto)) {
             return ResponseEntity.ok().build();
 
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(UNAUTHORIZED).build();
         }
     }
 
@@ -67,18 +82,17 @@ public class AuthController {
                             responseCode = CODE_400,
                             description = DESCRIPTION_CODE_400,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDTO register) {
-
-        if (authService.register(register)) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResponseEntity<?> register(@RequestBody RegisterDTO dto) {
+        return authService.register(dto);
     }
 }

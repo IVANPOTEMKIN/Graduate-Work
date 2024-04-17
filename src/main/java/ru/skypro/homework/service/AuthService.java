@@ -1,10 +1,14 @@
 package ru.skypro.homework.service;
 
+import org.springframework.http.ResponseEntity;
+import ru.skypro.homework.dto.auth.LoginDTO;
 import ru.skypro.homework.dto.auth.RegisterDTO;
+
+import javax.validation.Valid;
 
 public interface AuthService {
 
-    boolean login(String username, String password);
+    boolean login(@Valid LoginDTO dto);
 
-    boolean register(RegisterDTO dto);
+    ResponseEntity<?> register(@Valid RegisterDTO dto);
 }

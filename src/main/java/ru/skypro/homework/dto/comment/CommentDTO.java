@@ -8,21 +8,21 @@ import java.time.LocalDateTime;
 @Data
 public class CommentDTO {
 
-    @Schema(description = "id автора комментария")
+    @Schema(description = "ID автора комментария")
     private Integer author;
 
-    @Schema(description = "ссылка на аватар автора комментария")
+    @Schema(description = "Ссылка на аватар автора комментария")
     private String authorImage;
 
-    @Schema(description = "имя создателя комментария")
+    @Schema(description = "Имя создателя комментария")
     private String authorFirstName;
 
-    @Schema(description = "дата и время создания комментария в миллисекундах c 00:00:00 01.01.1970")
+    @Schema(description = "Дата и время создания комментария")
     private LocalDateTime createdAt;
 
-    @Schema(description = "id комментария")
+    @Schema(description = "ID комментария")
     private Integer pk;
 
-    @Schema(description = "текст комментария")
+    @Schema(description = "Текст комментария")
     private String text;
 }

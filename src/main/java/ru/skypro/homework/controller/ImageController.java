@@ -36,6 +36,11 @@ public class ImageController {
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
@@ -57,6 +62,11 @@ public class ImageController {
                     @ApiResponse(
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
                             content = @Content()
                     )
             }

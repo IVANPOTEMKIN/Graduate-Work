@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CommentsDTO {
 
-    @Schema(description = "общее количество комментариев")
+    @Schema(description = "Общее количество комментариев")
     private Integer count;
 
     private List<CommentDTO> results;

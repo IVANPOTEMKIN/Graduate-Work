@@ -9,6 +9,8 @@ import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Entity
 @Getter
 @Setter
@@ -17,7 +19,7 @@ import java.util.Objects;
 public class ImageEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id")
     private Integer id;
 
