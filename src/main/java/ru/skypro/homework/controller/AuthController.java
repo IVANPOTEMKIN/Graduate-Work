@@ -60,13 +60,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
-
         if (authService.login(dto)) {
             return ResponseEntity.ok().build();
-
-        } else {
-            return ResponseEntity.status(UNAUTHORIZED).build();
         }
+        return ResponseEntity.status(UNAUTHORIZED).build();
     }
 
     @Operation(

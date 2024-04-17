@@ -1,4 +1,4 @@
-package ru.skypro.homework.exception;
+package ru.skypro.homework.exception.file;
 
 public class FilePathNotFoundException extends RuntimeException {
     public FilePathNotFoundException() {

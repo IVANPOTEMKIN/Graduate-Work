@@ -1,4 +1,4 @@
-package ru.skypro.homework.exception;
+package ru.skypro.homework.exception.file;
 
 public class FailedSaveFileException extends RuntimeException {
     public FailedSaveFileException() {

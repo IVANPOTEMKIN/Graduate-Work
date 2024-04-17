@@ -16,6 +16,8 @@ public class CodesAndDescriptions {
     public static final String DESCRIPTION_CODE_403 = "Forbidden";
     public static final String CODE_404 = "404";
     public static final String DESCRIPTION_CODE_404 = "Not Found";
+    public static final String CODE_417 = "417";
+    public static final String DESCRIPTION_CODE_417 = "Expectation Failed";
     public static final String CODE_500 = "500";
     public static final String DESCRIPTION_CODE_500 = "Internal Server Error";
 }
