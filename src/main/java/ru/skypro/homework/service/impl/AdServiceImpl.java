@@ -83,8 +83,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    @PreAuthorize(value = "hasRole('ADMIN')" +
-            "or @adServiceImpl.isAuthor(authentication.getName, #id)")
+    @PreAuthorize(value = "@adServiceImpl.isAuthor(authentication.getName, #id)")
     public ResponseEntity<AdDTO> updateInfoAboutAd(int id, CreateOrUpdateAdDTO dto) {
         AdEntity ad = getById(id);
 
@@ -110,8 +109,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    @PreAuthorize(value = "hasRole('ADMIN')" +
-            "or @adServiceImpl.isAuthor(authentication.getName, #id)")
+    @PreAuthorize(value = "@adServiceImpl.isAuthor(authentication.getName, #id)")
     public ResponseEntity<String> updateImageOfAd(int id, MultipartFile file) {
         AdEntity ad = getById(id);
         ImageEntity image = imageService.saveImage(file);

@@ -85,9 +85,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @PreAuthorize(value = "hasRole('ADMIN')" +
-            "or @adServiceImpl.isAuthor(authentication.getName, #idAd)" +
-            "or @commentServiceImpl.isAuthor(authentication.getName, #idComment)")
+    @PreAuthorize(value = "@commentServiceImpl.isAuthor(authentication.getName, #idComment)")
     public ResponseEntity<CommentDTO> updateComment(int idAd, int idComment,
                                                     CreateOrUpdateCommentDTO dto) {
 
