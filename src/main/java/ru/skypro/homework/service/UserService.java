@@ -20,7 +20,7 @@ public interface UserService {
     ResponseEntity<UpdateUserDTO> updateInfoAboutUser(@Valid UpdateUserDTO dto,
                                                       Authentication auth);
 
-    ResponseEntity<?> updateAvatarOfUser(MultipartFile image,
+    ResponseEntity<?> updateAvatarOfUser(MultipartFile file,
                                          Authentication auth);
 
     UserEntity getUser(String username);

@@ -1,8 +1,11 @@
 package ru.skypro.homework.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.skypro.homework.exception.AdNotFoundException;
+import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.exception.ImageNotFoundException;
 import ru.skypro.homework.exception.file.FailedRecordFileException;
 import ru.skypro.homework.exception.file.FailedSaveFileException;
@@ -19,49 +22,38 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler
-    public ResponseEntity<String> handleException(FailedSaveFileException e) {
-        return ResponseEntity.status(EXPECTATION_FAILED).body(e.getMessage());
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<String> handleException(FailedRecordFileException e) {
-        return ResponseEntity.status(EXPECTATION_FAILED).body(e.getMessage());
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<String> handleException(ImageNotFoundException e) {
-        return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<String> handleException(FilePathNotFoundException e) {
-        return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<String> handleException(UserNotFoundException e) {
-        return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<String> handleException(UserAlreadyAddedException e) {
+    @ExceptionHandler(value = {
+            WrongPasswordException.class,
+            ReusePasswordException.class,
+            UserAlreadyAddedException.class})
+    public ResponseEntity<String> handle_BadRequest_Exception(Throwable e) {
         return ResponseEntity.status(BAD_REQUEST).body(e.getMessage());
     }
 
-    @ExceptionHandler
-    public ResponseEntity<String> handleException(WrongPasswordException e) {
-        return ResponseEntity.status(BAD_REQUEST).body(e.getMessage());
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<String> handleException(ReusePasswordException e) {
-        return ResponseEntity.status(BAD_REQUEST).body(e.getMessage());
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<String> handleException(Throwable e) {
-        e.initCause(new ConstraintDeclarationException());
+    @ExceptionHandler(value = {ConstraintDeclarationException.class})
+    public ResponseEntity<String> handle_Validation_Exception() {
         return ResponseEntity.status(BAD_REQUEST).body("ВВЕДЕНЫ НЕККОРЕКТНЫЕ ДАННЫЕ!");
+    }
+
+    @ExceptionHandler(value = {AccessDeniedException.class})
+    public ResponseEntity<String> handle_Access_Exception() {
+        return ResponseEntity.status(FORBIDDEN).body("ОШИБКА ДОСТУПА!");
+    }
+
+    @ExceptionHandler(value = {
+            ImageNotFoundException.class,
+            FilePathNotFoundException.class,
+            UserNotFoundException.class,
+            AdNotFoundException.class,
+            CommentNotFoundException.class})
+    public ResponseEntity<String> handle_NotFound_Exception(Throwable e) {
+        return ResponseEntity.status(NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(value = {
+            FailedSaveFileException.class,
+            FailedRecordFileException.class})
+    public ResponseEntity<String> handle_ExpectationFailed_Exception(Throwable e) {
+        return ResponseEntity.status(EXPECTATION_FAILED).body(e.getMessage());
     }
 }

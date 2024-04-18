@@ -8,7 +8,7 @@ import javax.validation.Valid;
 
 public interface AuthService {
 
-    boolean login(@Valid LoginDTO dto);
+    ResponseEntity<?> login(@Valid LoginDTO dto);
 
     ResponseEntity<?> register(@Valid RegisterDTO dto);
 }

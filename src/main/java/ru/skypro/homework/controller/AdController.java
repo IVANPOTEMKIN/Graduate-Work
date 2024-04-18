@@ -41,6 +41,11 @@ public class AdController {
                                     mediaType = APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = AdsDTO.class)
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
@@ -63,19 +68,41 @@ public class AdController {
                             )
                     ),
                     @ApiResponse(
+                            responseCode = CODE_400,
+                            description = DESCRIPTION_CODE_400,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
                             responseCode = CODE_401,
                             description = DESCRIPTION_CODE_401,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_404,
+                            description = DESCRIPTION_CODE_404,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_417,
+                            description = DESCRIPTION_CODE_417,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
                             content = @Content()
                     )
             }
     )
 
-    @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDTO> AddAd(@RequestPart CreateOrUpdateAdDTO properties,
-                                       @RequestPart MultipartFile image,
+    @PostMapping(consumes = {MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<AdDTO> AddAd(@RequestPart(name = "properties")
+                                       CreateOrUpdateAdDTO dto,
+                                       @RequestPart(name = "image")
+                                       MultipartFile file,
                                        Authentication auth) {
 
-        return service.AddAd(properties, image, auth);
+        return service.AddAd(dto, file, auth);
     }
 
     @Operation(
@@ -98,6 +125,11 @@ public class AdController {
                     @ApiResponse(
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
                             content = @Content()
                     )
             }
@@ -131,6 +163,16 @@ public class AdController {
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_417,
+                            description = DESCRIPTION_CODE_417,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
@@ -153,6 +195,11 @@ public class AdController {
                             )
                     ),
                     @ApiResponse(
+                            responseCode = CODE_400,
+                            description = DESCRIPTION_CODE_400,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
                             responseCode = CODE_401,
                             description = DESCRIPTION_CODE_401,
                             content = @Content()
@@ -165,6 +212,11 @@ public class AdController {
                     @ApiResponse(
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
                             content = @Content()
                     )
             }
@@ -192,6 +244,16 @@ public class AdController {
                     @ApiResponse(
                             responseCode = CODE_401,
                             description = DESCRIPTION_CODE_401,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_404,
+                            description = DESCRIPTION_CODE_404,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
                             content = @Content()
                     )
             }
@@ -230,14 +292,25 @@ public class AdController {
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_417,
+                            description = DESCRIPTION_CODE_417,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
 
-    @PatchMapping(value = "/{id}/image", consumes = MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/{id}/image", consumes = {MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> updateImageOfAd(@PathVariable int id,
-                                                  @RequestPart MultipartFile image) {
+                                                  @RequestPart(name = "image")
+                                                  MultipartFile file) {
 
-        return service.updateImageOfAd(id, image);
+        return service.updateImageOfAd(id, file);
     }
 }

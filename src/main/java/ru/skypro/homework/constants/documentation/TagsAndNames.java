@@ -2,9 +2,7 @@ package ru.skypro.homework.constants.documentation;
 
 public class TagsAndNames {
 
-    /*
-    ТЕГИ
-     */
+    // ТЕГИ
 
     public static final String TAG_USERS = "Пользователи";
     public static final String TAG_REGISTRATION = "Регистрация";
@@ -13,9 +11,7 @@ public class TagsAndNames {
     public static final String TAG_COMMENTS = "Комментарии";
     public static final String TAG_IMAGES = "Изображения";
 
-    /*
-    НАИМЕНОВАНИЯ МЕТОДОВ
-     */
+    // НАИМЕНОВАНИЯ МЕТОДОВ
 
     public static final String UPDATE_PASSWORD = "Обновление пароля";
     public static final String GET_INFO_ABOUT_USER = "Получение информации об авторизованном пользователе";

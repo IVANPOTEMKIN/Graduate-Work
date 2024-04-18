@@ -9,23 +9,25 @@ import ru.skypro.homework.dto.ad.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ad.ExtendedAdDTO;
 import ru.skypro.homework.entity.AdEntity;
 
+import javax.validation.Valid;
+
 public interface AdService {
 
     ResponseEntity<AdsDTO> getAllAds();
 
-    ResponseEntity<AdDTO> AddAd(CreateOrUpdateAdDTO properties,
-                                MultipartFile image,
+    ResponseEntity<AdDTO> AddAd(@Valid CreateOrUpdateAdDTO dto,
+                                MultipartFile file,
                                 Authentication auth);
 
     ResponseEntity<ExtendedAdDTO> getInfoAboutAd(int id);
 
     ResponseEntity<?> deleteAd(int id);
 
-    ResponseEntity<AdDTO> updateInfoAboutAd(int id, CreateOrUpdateAdDTO dto);
+    ResponseEntity<AdDTO> updateInfoAboutAd(int id, @Valid CreateOrUpdateAdDTO dto);
 
     ResponseEntity<AdsDTO> getAllAdsOfUser(Authentication auth);
 
-    ResponseEntity<String> updateImageOfAd(int id, MultipartFile image);
+    ResponseEntity<String> updateImageOfAd(int id, MultipartFile file);
 
     AdEntity getById(int id);
 }

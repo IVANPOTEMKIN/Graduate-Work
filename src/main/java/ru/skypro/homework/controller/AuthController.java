@@ -14,7 +14,6 @@ import ru.skypro.homework.dto.auth.LoginDTO;
 import ru.skypro.homework.dto.auth.RegisterDTO;
 import ru.skypro.homework.service.AuthService;
 
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
 import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 
@@ -60,10 +59,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
-        if (authService.login(dto)) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.status(UNAUTHORIZED).build();
+        return authService.login(dto);
     }
 
     @Operation(

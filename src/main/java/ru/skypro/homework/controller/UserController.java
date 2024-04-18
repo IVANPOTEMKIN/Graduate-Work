@@ -177,10 +177,11 @@ public class UserController {
             }
     )
 
-    @PatchMapping(value = "/me/image", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateAvatarOfUser(@RequestParam MultipartFile image,
+    @PatchMapping(value = "/me/image", consumes = {MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> updateAvatarOfUser(@RequestParam(name = "image")
+                                                MultipartFile file,
                                                 Authentication auth) {
 
-        return service.updateAvatarOfUser(image, auth);
+        return service.updateAvatarOfUser(file, auth);
     }
 }
