@@ -9,10 +9,12 @@ import javax.validation.constraints.Size;
 public class LoginDTO {
 
     @Schema(description = "Логин")
-    @Size(min = 4, max = 32)
+    @Size(min = 4, max = 32,
+            message = "ЛОГИН ДОЛЖЕН БЫТЬ В ДИАПАЗОНЕ ОТ 4 ДО 32 СИМВОЛОВ!")
     private String username;
 
     @Schema(description = "Пароль")
-    @Size(min = 8, max = 16)
+    @Size(min = 8, max = 16,
+            message = "ПАРОЛЬ ДОЛЖЕН БЫТЬ В ДИАПАЗОНЕ ОТ 8 ДО 16 СИМВОЛОВ!")
     private String password;
 }

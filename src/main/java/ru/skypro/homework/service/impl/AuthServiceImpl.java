@@ -29,11 +29,11 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final UserRepository repository;
     private final UserMapper mapper;
-    private final UserDetailsService service;
+    private final UserDetailsService detailsService;
 
     @Override
     public ResponseEntity<?> login(LoginDTO dto) {
-        UserDetails details = service.loadUserByUsername(dto.getUsername());
+        UserDetails details = detailsService.loadUserByUsername(dto.getUsername());
 
         if (!encoder.matches(dto.getPassword(), details.getPassword())) {
             throw new WrongPasswordException();

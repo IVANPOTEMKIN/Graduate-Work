@@ -52,7 +52,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public ResponseEntity<AdDTO> AddAd(CreateOrUpdateAdDTO dto,
+    public ResponseEntity<AdDTO> addAd(CreateOrUpdateAdDTO dto,
                                        MultipartFile file,
                                        Authentication auth) {
 

@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 public class CreateOrUpdateCommentDTO {
 
     @Schema(description = "Текст комментария")
-    @Size(min = 8, max = 64)
+    @Size(min = 8, max = 64,
+            message = "ТЕКСТ КОММЕНТАРИЯ ДОЛЖЕН БЫТЬ В ДИАПАЗОНЕ ОТ 8 ДО 64 СИМВОЛОВ!")
     private String text;
 }

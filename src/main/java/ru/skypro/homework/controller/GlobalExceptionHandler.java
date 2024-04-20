@@ -15,7 +15,7 @@ import ru.skypro.homework.exception.password.WrongPasswordException;
 import ru.skypro.homework.exception.user.UserAlreadyAddedException;
 import ru.skypro.homework.exception.user.UserNotFoundException;
 
-import javax.validation.ConstraintDeclarationException;
+import javax.validation.ConstraintViolationException;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -30,9 +30,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(BAD_REQUEST).body(e.getMessage());
     }
 
-    @ExceptionHandler(value = {ConstraintDeclarationException.class})
-    public ResponseEntity<String> handle_Validation_Exception() {
-        return ResponseEntity.status(BAD_REQUEST).body("ВВЕДЕНЫ НЕККОРЕКТНЫЕ ДАННЫЕ!");
+    @ExceptionHandler(value = {ConstraintViolationException.class})
+    public ResponseEntity<String> handle_Validation_Exception(Throwable e) {
+        return ResponseEntity.status(BAD_REQUEST).body(e.getMessage());
     }
 
     @ExceptionHandler(value = {AccessDeniedException.class})

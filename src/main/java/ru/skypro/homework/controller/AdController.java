@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +20,10 @@ import static org.springframework.http.MediaType.*;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
 import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 
-@Slf4j
-@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ads")
+@CrossOrigin(value = "http://localhost:3000")
 public class AdController {
 
     private final AdService service;
@@ -96,13 +94,13 @@ public class AdController {
     )
 
     @PostMapping(consumes = {MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<AdDTO> AddAd(@RequestPart(name = "properties")
+    public ResponseEntity<AdDTO> addAd(@RequestPart(name = "properties")
                                        CreateOrUpdateAdDTO dto,
                                        @RequestPart(name = "image")
                                        MultipartFile file,
                                        Authentication auth) {
 
-        return service.AddAd(dto, file, auth);
+        return service.addAd(dto, file, auth);
     }
 
     @Operation(

@@ -6,9 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.ImageEntity;
+import ru.skypro.homework.exception.ImageNotFoundException;
 import ru.skypro.homework.exception.file.FailedSaveFileException;
 import ru.skypro.homework.exception.file.FilePathNotFoundException;
-import ru.skypro.homework.exception.ImageNotFoundException;
 import ru.skypro.homework.mapper.ImageMapper;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.ImageService;
@@ -77,7 +77,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     private ImageEntity getImage(int id) {
-        return repository.findImageEntityById(id)
+        return repository.findById(id)
                 .orElseThrow(ImageNotFoundException::new);
     }
 

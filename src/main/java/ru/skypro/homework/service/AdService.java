@@ -15,7 +15,7 @@ public interface AdService {
 
     ResponseEntity<AdsDTO> getAllAds();
 
-    ResponseEntity<AdDTO> AddAd(@Valid CreateOrUpdateAdDTO dto,
+    ResponseEntity<AdDTO> addAd(@Valid CreateOrUpdateAdDTO dto,
                                 MultipartFile file,
                                 Authentication auth);
 

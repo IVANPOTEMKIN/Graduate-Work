@@ -31,8 +31,8 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder encoder;
     private final UserRepository repository;
+    private final ImageService imageService;
     private final UserMapper mapper;
-    private final ImageService service;
 
     @Override
     public ResponseEntity<?> updatePassword(NewPasswordDTO dto,
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
                                                 Authentication auth) {
 
         UserEntity user = getUser(auth.getName());
-        ImageEntity avatar = service.saveImage(file);
+        ImageEntity avatar = imageService.saveImage(file);
         user.setAvatar(avatar);
         repository.save(user);
         return ResponseEntity.ok().build();
