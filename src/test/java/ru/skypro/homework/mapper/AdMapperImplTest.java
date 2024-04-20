@@ -8,6 +8,8 @@ import ru.skypro.homework.mapper.impl.AdMapperImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static ru.skypro.homework.utils.Examples.createAdEntity;
+import static ru.skypro.homework.utils.Examples.createCreateOrUpdateAdDTO;
 import static ru.skypro.homework.utils.mapper.AdMapperUtils.*;
 
 class AdMapperImplTest {
@@ -35,7 +37,7 @@ class AdMapperImplTest {
     @Test
     void toAdEntity() {
         AdEntity expected = getAdEntity_From_CreateOrUpdateAdDTO();
-        AdEntity actual = mapper.toAdEntity(createDTO());
+        AdEntity actual = mapper.toAdEntity(createCreateOrUpdateAdDTO());
 
         assertNotNull(actual);
         assertEquals(expected, actual);

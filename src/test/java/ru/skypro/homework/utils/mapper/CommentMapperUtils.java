@@ -6,35 +6,13 @@ import ru.skypro.homework.entity.CommentEntity;
 
 import static java.time.LocalDateTime.MIN;
 import static ru.skypro.homework.constants.URL.USER;
-import static ru.skypro.homework.utils.Constants.ID;
-import static ru.skypro.homework.utils.Constants.TEXT;
-import static ru.skypro.homework.utils.mapper.AdMapperUtils.createAdEntity;
-import static ru.skypro.homework.utils.mapper.UserMapperUtils.createUserEntity;
+import static ru.skypro.homework.utils.Examples.createCommentEntity;
+import static ru.skypro.homework.utils.Examples.createCreateOrUpdateCommentDTO;
 
 public class CommentMapperUtils {
 
-    public static CommentEntity createEntity() {
-        CommentEntity entity = new CommentEntity();
-
-        entity.setId(ID);
-        entity.setCreatedAt(MIN);
-        entity.setText(TEXT);
-        entity.setAd(createAdEntity());
-        entity.setAuthor(createUserEntity());
-
-        return entity;
-    }
-
-    public static CreateOrUpdateCommentDTO createDTO() {
-        CreateOrUpdateCommentDTO dto = new CreateOrUpdateCommentDTO();
-
-        dto.setText(TEXT);
-
-        return dto;
-    }
-
-    public static CommentDTO toCommentDTO_From_CommentEntity() {
-        CommentEntity entity = createEntity();
+    public static CommentDTO getCommentDTO_From_CommentEntity() {
+        CommentEntity entity = createCommentEntity();
         CommentDTO dto = new CommentDTO();
 
         dto.setAuthor(entity.getAuthor().getId());
@@ -47,8 +25,8 @@ public class CommentMapperUtils {
         return dto;
     }
 
-    public static CommentEntity toCommentEntity_From_CreateOrUpdateCommentDTO() {
-        CreateOrUpdateCommentDTO dto = createDTO();
+    public static CommentEntity getCommentEntity_From_CreateOrUpdateCommentDTO() {
+        CreateOrUpdateCommentDTO dto = createCreateOrUpdateCommentDTO();
         CommentEntity entity = new CommentEntity();
 
         entity.setText(dto.getText());

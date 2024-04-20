@@ -13,6 +13,7 @@ import ru.skypro.homework.dto.auth.LoginDTO;
 import ru.skypro.homework.dto.auth.RegisterDTO;
 import ru.skypro.homework.service.AuthService;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
 import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 
@@ -57,7 +58,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
-        return authService.login(dto);
+        authService.login(dto);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
@@ -84,6 +86,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterDTO dto) {
-        return authService.register(dto);
+        authService.register(dto);
+        return ResponseEntity.status(CREATED).build();
     }
 }

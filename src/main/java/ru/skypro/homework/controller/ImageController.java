@@ -45,7 +45,7 @@ public class ImageController {
 
     @GetMapping(value = "/user/{id}", produces = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
     public ResponseEntity<byte[]> getAvatar(@PathVariable int id) {
-        return service.downloadImage(id);
+        return ResponseEntity.ok(service.downloadImage(id));
     }
 
     @Operation(
@@ -72,6 +72,6 @@ public class ImageController {
 
     @GetMapping(value = "/ad/{id}", produces = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
     public ResponseEntity<byte[]> getImage(@PathVariable int id) {
-        return service.downloadImage(id);
+        return ResponseEntity.ok(service.downloadImage(id));
     }
 }

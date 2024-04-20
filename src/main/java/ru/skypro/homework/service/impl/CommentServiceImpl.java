@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -38,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper mapper;
 
     @Override
-    public ResponseEntity<CommentsDTO> getAllCommentsOfAd(int id) {
+    public CommentsDTO getAllCommentsOfAd(int id) {
         AdEntity ad = adService.getById(id);
 
         List<CommentDTO> list = repository.findCommentEntitiesByAd(ad)
@@ -46,13 +45,12 @@ public class CommentServiceImpl implements CommentService {
                 .map(mapper::toCommentDTO)
                 .collect(Collectors.toList());
 
-        CommentsDTO dto = new CommentsDTO(list.size(), list);
-        return ResponseEntity.ok(dto);
+        return new CommentsDTO(list.size(), list);
     }
 
     @Override
-    public ResponseEntity<CommentDTO> addCommentToAd(int id, CreateOrUpdateCommentDTO dto,
-                                                     Authentication auth) {
+    public CommentDTO addCommentToAd(int id, CreateOrUpdateCommentDTO dto,
+                                     Authentication auth) {
 
         UserEntity user = userService.getUser(auth.getName());
         AdEntity ad = adService.getById(id);
@@ -63,14 +61,14 @@ public class CommentServiceImpl implements CommentService {
         comment.setAuthor(user);
 
         repository.save(comment);
-        return ResponseEntity.ok(mapper.toCommentDTO(comment));
+        return mapper.toCommentDTO(comment);
     }
 
     @Override
     @PreAuthorize(value = "hasRole('ADMIN')" +
             "or @adServiceImpl.isAuthor(authentication.getName, #idAd)" +
             "or @commentServiceImpl.isAuthor(authentication.getName, #idComment)")
-    public ResponseEntity<?> deleteComment(int idAd, int idComment) {
+    public void deleteComment(int idAd, int idComment) {
         AdEntity ad = adService.getById(idAd);
         List<CommentEntity> comments = repository.findCommentEntitiesByAd(ad);
 
@@ -79,15 +77,14 @@ public class CommentServiceImpl implements CommentService {
             if (comment.getId().equals(idComment)) {
                 repository.delete(comment);
             }
-            return ResponseEntity.ok().build();
         }
         throw new CommentNotFoundException();
     }
 
     @Override
     @PreAuthorize(value = "@commentServiceImpl.isAuthor(authentication.getName, #idComment)")
-    public ResponseEntity<CommentDTO> updateComment(int idAd, int idComment,
-                                                    CreateOrUpdateCommentDTO dto) {
+    public CommentDTO updateComment(int idAd, int idComment,
+                                    CreateOrUpdateCommentDTO dto) {
 
         AdEntity ad = adService.getById(idAd);
         List<CommentEntity> comments = repository.findCommentEntitiesByAd(ad);
@@ -99,7 +96,7 @@ public class CommentServiceImpl implements CommentService {
                 comment.setCreatedAt(now());
                 repository.save(comment);
             }
-            return ResponseEntity.ok(mapper.toCommentDTO(comment));
+            return mapper.toCommentDTO(comment);
         }
         throw new CommentNotFoundException();
     }

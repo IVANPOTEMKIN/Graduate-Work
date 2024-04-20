@@ -63,7 +63,8 @@ public class UserController {
     public ResponseEntity<?> updatePassword(@RequestBody NewPasswordDTO dto,
                                             Authentication auth) {
 
-        return service.updatePassword(dto, auth);
+        service.updatePassword(dto, auth);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
@@ -98,7 +99,7 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getInfoAboutUser(Authentication auth) {
-        return service.getInfoAboutUser(auth);
+        return ResponseEntity.ok(service.getInfoAboutUser(auth));
     }
 
     @Operation(
@@ -140,7 +141,7 @@ public class UserController {
     public ResponseEntity<UpdateUserDTO> updateInfoAboutUser(@RequestBody UpdateUserDTO dto,
                                                              Authentication auth) {
 
-        return service.updateInfoAboutUser(dto, auth);
+        return ResponseEntity.ok(service.updateInfoAboutUser(dto, auth));
     }
 
     @Operation(
@@ -180,6 +181,7 @@ public class UserController {
                                                 MultipartFile file,
                                                 Authentication auth) {
 
-        return service.updateAvatarOfUser(file, auth);
+        service.updateAvatarOfUser(file, auth);
+        return ResponseEntity.ok().build();
     }
 }

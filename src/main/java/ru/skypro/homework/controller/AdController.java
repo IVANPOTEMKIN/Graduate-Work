@@ -16,6 +16,8 @@ import ru.skypro.homework.dto.ad.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ad.ExtendedAdDTO;
 import ru.skypro.homework.service.AdService;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.*;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
 import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
@@ -50,7 +52,7 @@ public class AdController {
 
     @GetMapping
     public ResponseEntity<AdsDTO> getAllAds() {
-        return service.getAllAds();
+        return ResponseEntity.ok(service.getAllAds());
     }
 
     @Operation(
@@ -100,7 +102,7 @@ public class AdController {
                                        MultipartFile file,
                                        Authentication auth) {
 
-        return service.addAd(dto, file, auth);
+        return ResponseEntity.status(CREATED).body(service.addAd(dto, file, auth));
     }
 
     @Operation(
@@ -135,7 +137,7 @@ public class AdController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAdDTO> getInfoAboutAd(@PathVariable int id) {
-        return service.getInfoAboutAd(id);
+        return ResponseEntity.ok(service.getInfoAboutAd(id));
     }
 
     @Operation(
@@ -177,7 +179,8 @@ public class AdController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAd(@PathVariable int id) {
-        return service.deleteAd(id);
+        service.deleteAd(id);
+        return ResponseEntity.status(NO_CONTENT).build();
     }
 
     @Operation(
@@ -224,7 +227,7 @@ public class AdController {
     public ResponseEntity<AdDTO> updateInfoAboutAd(@PathVariable int id,
                                                    @RequestBody CreateOrUpdateAdDTO dto) {
 
-        return service.updateInfoAboutAd(id, dto);
+        return ResponseEntity.ok(service.updateInfoAboutAd(id, dto));
     }
 
     @Operation(
@@ -259,7 +262,7 @@ public class AdController {
 
     @GetMapping("/me")
     public ResponseEntity<AdsDTO> getAllAdsOfUser(Authentication auth) {
-        return service.getAllAdsOfUser(auth);
+        return ResponseEntity.ok(service.getAllAdsOfUser(auth));
     }
 
     @Operation(
@@ -309,6 +312,6 @@ public class AdController {
                                                   @RequestPart(name = "image")
                                                   MultipartFile file) {
 
-        return service.updateImageOfAd(id, file);
+        return ResponseEntity.ok(service.updateImageOfAd(id, file));
     }
 }

@@ -3,53 +3,13 @@ package ru.skypro.homework.utils.mapper;
 import ru.skypro.homework.dto.auth.RegisterDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
-import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 
-import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 import static ru.skypro.homework.constants.URL.USER;
-import static ru.skypro.homework.dto.Role.ADMIN;
-import static ru.skypro.homework.utils.Constants.*;
+import static ru.skypro.homework.utils.Examples.createRegisterDTO;
+import static ru.skypro.homework.utils.Examples.createUserEntity;
 
 public class UserMapperUtils {
-
-    public static UserEntity createUserEntity() {
-        UserEntity entity = new UserEntity();
-
-        entity.setId(ID);
-        entity.setUsername(USERNAME);
-        entity.setPassword(PASSWORD);
-        entity.setFirstName(FIRST_NAME);
-        entity.setLastName(LAST_NAME);
-        entity.setPhoneNumber(PHONE_NUMBER);
-        entity.setRole(ADMIN);
-        entity.setAvatar(createImageEntity());
-
-        return entity;
-    }
-
-    public static ImageEntity createImageEntity() {
-        ImageEntity entity = new ImageEntity();
-
-        entity.setId(ID);
-        entity.setSize(1000L);
-        entity.setType(IMAGE_PNG_VALUE);
-
-        return entity;
-    }
-
-    public static RegisterDTO createDTO() {
-        RegisterDTO dto = new RegisterDTO();
-
-        dto.setUsername(USERNAME);
-        dto.setPassword(PASSWORD);
-        dto.setFirstName(FIRST_NAME);
-        dto.setLastName(LAST_NAME);
-        dto.setPhone(PHONE_NUMBER);
-        dto.setRole(ADMIN);
-
-        return dto;
-    }
 
     public static UserDTO getUserDTO_From_UserEntity() {
         UserEntity entity = createUserEntity();
@@ -78,7 +38,7 @@ public class UserMapperUtils {
     }
 
     public static UserEntity getUserEntity_From_RegisterDTO() {
-        RegisterDTO dto = createDTO();
+        RegisterDTO dto = createRegisterDTO();
         UserEntity entity = new UserEntity();
 
         entity.setUsername(dto.getUsername());

@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +16,6 @@ import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
-import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 
 @Service
@@ -32,17 +30,16 @@ public class AuthServiceImpl implements AuthService {
     private final UserDetailsService detailsService;
 
     @Override
-    public ResponseEntity<?> login(LoginDTO dto) {
+    public void login(LoginDTO dto) {
         UserDetails details = detailsService.loadUserByUsername(dto.getUsername());
 
         if (!encoder.matches(dto.getPassword(), details.getPassword())) {
             throw new WrongPasswordException();
         }
-        return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<?> register(RegisterDTO dto) {
+    public void register(RegisterDTO dto) {
         UserEntity user = mapper.toUserEntity(dto);
 
         if (repository.findUserEntityByUsername(user.getUsername()).isPresent()) {
@@ -51,6 +48,5 @@ public class AuthServiceImpl implements AuthService {
 
         user.setPassword(encoder.encode(user.getPassword()));
         repository.save(user);
-        return ResponseEntity.status(CREATED).build();
     }
 }

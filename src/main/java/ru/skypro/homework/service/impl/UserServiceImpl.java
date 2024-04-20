@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,25 +34,24 @@ public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
 
     @Override
-    public ResponseEntity<?> updatePassword(NewPasswordDTO dto,
-                                            Authentication auth) {
+    public void updatePassword(NewPasswordDTO dto,
+                               Authentication auth) {
 
         UserEntity user = getUser(auth.getName());
         String password = checkPasswords(dto, user);
         user.setPassword(encoder.encode(password));
         repository.save(user);
-        return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<UserDTO> getInfoAboutUser(Authentication auth) {
+    public UserDTO getInfoAboutUser(Authentication auth) {
         UserEntity user = getUser(auth.getName());
-        return ResponseEntity.ok(mapper.toUserDTO(user));
+        return mapper.toUserDTO(user);
     }
 
     @Override
-    public ResponseEntity<UpdateUserDTO> updateInfoAboutUser(UpdateUserDTO dto,
-                                                             Authentication auth) {
+    public UpdateUserDTO updateInfoAboutUser(UpdateUserDTO dto,
+                                             Authentication auth) {
 
         UserEntity user = getUser(auth.getName());
 
@@ -62,18 +60,17 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(dto.getPhone());
 
         repository.save(user);
-        return ResponseEntity.ok(mapper.toUpdateUserDTO(user));
+        return mapper.toUpdateUserDTO(user);
     }
 
     @Override
-    public ResponseEntity<?> updateAvatarOfUser(MultipartFile file,
-                                                Authentication auth) {
+    public void updateAvatarOfUser(MultipartFile file,
+                                   Authentication auth) {
 
         UserEntity user = getUser(auth.getName());
         ImageEntity avatar = imageService.saveImage(file);
         user.setAvatar(avatar);
         repository.save(user);
-        return ResponseEntity.ok().build();
     }
 
     @Override

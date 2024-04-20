@@ -8,6 +8,8 @@ import ru.skypro.homework.mapper.impl.UserMapperImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static ru.skypro.homework.utils.Examples.createRegisterDTO;
+import static ru.skypro.homework.utils.Examples.createUserEntity;
 import static ru.skypro.homework.utils.mapper.UserMapperUtils.*;
 
 class UserMapperImplTest {
@@ -35,7 +37,7 @@ class UserMapperImplTest {
     @Test
     void toUserEntity() {
         UserEntity expected = getUserEntity_From_RegisterDTO();
-        UserEntity actual = mapper.toUserEntity(createDTO());
+        UserEntity actual = mapper.toUserEntity(createRegisterDTO());
 
         assertNotNull(actual);
         assertEquals(expected, actual);

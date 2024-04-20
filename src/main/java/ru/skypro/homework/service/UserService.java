@@ -1,6 +1,5 @@
 package ru.skypro.homework.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.auth.NewPasswordDTO;
@@ -12,16 +11,16 @@ import javax.validation.Valid;
 
 public interface UserService {
 
-    ResponseEntity<?> updatePassword(@Valid NewPasswordDTO dto,
-                                     Authentication auth);
+    void updatePassword(@Valid NewPasswordDTO dto,
+                        Authentication auth);
 
-    ResponseEntity<UserDTO> getInfoAboutUser(Authentication auth);
+    UserDTO getInfoAboutUser(Authentication auth);
 
-    ResponseEntity<UpdateUserDTO> updateInfoAboutUser(@Valid UpdateUserDTO dto,
-                                                      Authentication auth);
+    UpdateUserDTO updateInfoAboutUser(@Valid UpdateUserDTO dto,
+                                      Authentication auth);
 
-    ResponseEntity<?> updateAvatarOfUser(MultipartFile file,
-                                         Authentication auth);
+    void updateAvatarOfUser(MultipartFile file,
+                            Authentication auth);
 
     UserEntity getUser(String username);
 }

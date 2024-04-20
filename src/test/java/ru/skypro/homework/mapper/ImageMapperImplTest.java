@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static ru.skypro.homework.utils.mapper.ImageMapperUtils.createFilePNG;
+import static ru.skypro.homework.utils.Examples.createFilePNG;
 import static ru.skypro.homework.utils.mapper.ImageMapperUtils.getImageEntity_From_MultipartFile;
 
 class ImageMapperImplTest {

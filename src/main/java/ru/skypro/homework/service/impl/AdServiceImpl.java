@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -25,8 +24,6 @@ import ru.skypro.homework.service.UserService;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 
 @Service
@@ -41,20 +38,19 @@ public class AdServiceImpl implements AdService {
     private final AdMapper mapper;
 
     @Override
-    public ResponseEntity<AdsDTO> getAllAds() {
+    public AdsDTO getAllAds() {
         List<AdDTO> list = repository.findAll()
                 .stream()
                 .map(mapper::toAdDTO)
                 .collect(Collectors.toList());
 
-        AdsDTO dto = new AdsDTO(list.size(), list);
-        return ResponseEntity.ok(dto);
+        return new AdsDTO(list.size(), list);
     }
 
     @Override
-    public ResponseEntity<AdDTO> addAd(CreateOrUpdateAdDTO dto,
-                                       MultipartFile file,
-                                       Authentication auth) {
+    public AdDTO addAd(CreateOrUpdateAdDTO dto,
+                       MultipartFile file,
+                       Authentication auth) {
 
         AdEntity ad = mapper.toAdEntity(dto);
         UserEntity user = userService.getUser(auth.getName());
@@ -64,27 +60,26 @@ public class AdServiceImpl implements AdService {
         ad.setImage(image);
 
         repository.save(ad);
-        return ResponseEntity.status(CREATED).body(mapper.toAdDTO(ad));
+        return mapper.toAdDTO(ad);
     }
 
     @Override
-    public ResponseEntity<ExtendedAdDTO> getInfoAboutAd(int id) {
-        return ResponseEntity.ok(mapper.toExtendedAdDTO(getById(id)));
+    public ExtendedAdDTO getInfoAboutAd(int id) {
+        return mapper.toExtendedAdDTO(getById(id));
     }
 
     @Override
     @PreAuthorize(value = "hasRole('ADMIN')" +
             "or @adServiceImpl.isAuthor(authentication.getName, #id)")
-    public ResponseEntity<?> deleteAd(int id) {
+    public void deleteAd(int id) {
         AdEntity ad = getById(id);
         repository.delete(ad);
         imageService.deleteImage(ad.getImage().getId());
-        return ResponseEntity.status(NO_CONTENT).build();
     }
 
     @Override
     @PreAuthorize(value = "@adServiceImpl.isAuthor(authentication.getName, #id)")
-    public ResponseEntity<AdDTO> updateInfoAboutAd(int id, CreateOrUpdateAdDTO dto) {
+    public AdDTO updateInfoAboutAd(int id, CreateOrUpdateAdDTO dto) {
         AdEntity ad = getById(id);
 
         ad.setTitle(dto.getTitle());
@@ -92,11 +87,11 @@ public class AdServiceImpl implements AdService {
         ad.setDescription(dto.getDescription());
 
         repository.save(ad);
-        return ResponseEntity.ok(mapper.toAdDTO(ad));
+        return mapper.toAdDTO(ad);
     }
 
     @Override
-    public ResponseEntity<AdsDTO> getAllAdsOfUser(Authentication auth) {
+    public AdsDTO getAllAdsOfUser(Authentication auth) {
         UserEntity user = userService.getUser(auth.getName());
 
         List<AdDTO> list = repository.findAdEntitiesByAuthor(user)
@@ -104,18 +99,17 @@ public class AdServiceImpl implements AdService {
                 .map(mapper::toAdDTO)
                 .collect(Collectors.toList());
 
-        AdsDTO dto = new AdsDTO(list.size(), list);
-        return ResponseEntity.ok(dto);
+        return new AdsDTO(list.size(), list);
     }
 
     @Override
     @PreAuthorize(value = "@adServiceImpl.isAuthor(authentication.getName, #id)")
-    public ResponseEntity<String> updateImageOfAd(int id, MultipartFile file) {
+    public String updateImageOfAd(int id, MultipartFile file) {
         AdEntity ad = getById(id);
         ImageEntity image = imageService.saveImage(file);
         ad.setImage(image);
         repository.save(ad);
-        return ResponseEntity.ok(image.getPath());
+        return image.getPath();
     }
 
     @Override

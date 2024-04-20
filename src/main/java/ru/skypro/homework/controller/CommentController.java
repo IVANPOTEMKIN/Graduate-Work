@@ -57,7 +57,7 @@ public class CommentController {
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<CommentsDTO> getAllCommentsOfAd(@PathVariable int id) {
-        return service.getAllCommentsOfAd(id);
+        return ResponseEntity.ok(service.getAllCommentsOfAd(id));
     }
 
     @Operation(
@@ -100,7 +100,7 @@ public class CommentController {
                                                      @RequestBody CreateOrUpdateCommentDTO dto,
                                                      Authentication auth) {
 
-        return service.addCommentToAd(id, dto, auth);
+        return ResponseEntity.ok(service.addCommentToAd(id, dto, auth));
     }
 
     @Operation(
@@ -139,7 +139,8 @@ public class CommentController {
     public ResponseEntity<?> deleteComment(@PathVariable int adid,
                                            @PathVariable int commentid) {
 
-        return service.deleteComment(adid, commentid);
+        service.deleteComment(adid, commentid);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
@@ -187,6 +188,6 @@ public class CommentController {
                                                     @PathVariable int commentid,
                                                     @RequestBody CreateOrUpdateCommentDTO dto) {
 
-        return service.updateComment(adid, commentid, dto);
+        return ResponseEntity.ok(service.updateComment(adid, commentid, dto));
     }
 }

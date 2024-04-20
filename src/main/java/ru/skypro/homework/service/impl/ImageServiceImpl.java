@@ -2,7 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.ImageEntity;
@@ -45,12 +44,12 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ResponseEntity<byte[]> downloadImage(int id) {
+    public byte[] downloadImage(int id) {
         ImageEntity image = getImage(id);
         Path path = Path.of(image.getPath());
 
         try {
-            return ResponseEntity.ok(Files.readAllBytes(path));
+            return Files.readAllBytes(path);
         } catch (IOException e) {
             throw new FilePathNotFoundException();
         }
