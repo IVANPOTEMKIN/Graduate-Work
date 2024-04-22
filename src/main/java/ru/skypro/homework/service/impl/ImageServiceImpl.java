@@ -2,13 +2,12 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.ImageEntity;
-import ru.skypro.homework.exception.FailedSaveFileException;
-import ru.skypro.homework.exception.FilePathNotFoundException;
 import ru.skypro.homework.exception.ImageNotFoundException;
+import ru.skypro.homework.exception.file.FailedSaveFileException;
+import ru.skypro.homework.exception.file.FilePathNotFoundException;
 import ru.skypro.homework.mapper.ImageMapper;
 import ru.skypro.homework.repository.ImageRepository;
 import ru.skypro.homework.service.ImageService;
@@ -45,19 +44,19 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ResponseEntity<byte[]> downloadImage(int id) {
+    public byte[] downloadImage(int id) {
         ImageEntity image = getImage(id);
         Path path = Path.of(image.getPath());
 
         try {
-            return ResponseEntity.ok(Files.readAllBytes(path));
+            return Files.readAllBytes(path);
         } catch (IOException e) {
             throw new FilePathNotFoundException();
         }
     }
 
     @Override
-    public void deleteImage(int id) {
+    public boolean deleteImage(int id) {
         ImageEntity image = getImage(id);
         Path path = Path.of(image.getPath());
 
@@ -68,6 +67,7 @@ public class ImageServiceImpl implements ImageService {
         }
 
         repository.delete(image);
+        return true;
     }
 
     private ImageEntity saveToDB(MultipartFile file, Path path) {
@@ -77,12 +77,11 @@ public class ImageServiceImpl implements ImageService {
     }
 
     private ImageEntity getImage(int id) {
-        return repository.findImageEntityById(id)
+        return repository.findById(id)
                 .orElseThrow(ImageNotFoundException::new);
     }
 
     private Path savePath(MultipartFile file) throws IOException {
-
         Path path = createPath(file);
 
         Files.createDirectories(path.getParent());
@@ -101,7 +100,6 @@ public class ImageServiceImpl implements ImageService {
     }
 
     private Path createPath(MultipartFile file) {
-
         Random random = new Random();
 
         return Path.of(directory, file.getName().hashCode() * file.getSize() * random.nextInt(100)

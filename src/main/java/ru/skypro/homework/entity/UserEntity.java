@@ -10,6 +10,10 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.EnumType.STRING;
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Entity
 @Getter
 @Setter
@@ -18,7 +22,7 @@ import java.util.Objects;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id")
     private Integer id;
 
@@ -37,7 +41,7 @@ public class UserEntity {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     @Column(name = "role")
     private Role role;
 
@@ -45,11 +49,13 @@ public class UserEntity {
     @JoinColumn(name = "avatar_id")
     private ImageEntity avatar;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author",
+            cascade = ALL)
     @JsonIgnore
     private List<AdEntity> ads;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author",
+            cascade = ALL)
     @JsonIgnore
     private List<CommentEntity> comments;
 

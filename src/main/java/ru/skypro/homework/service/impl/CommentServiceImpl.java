@@ -1,15 +1,17 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import ru.skypro.homework.dto.comment.CommentDTO;
 import ru.skypro.homework.dto.comment.CommentsDTO;
 import ru.skypro.homework.dto.comment.CreateOrUpdateCommentDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.AdService;
@@ -20,10 +22,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 
 @Service
+@Validated
 @RequiredArgsConstructor
+@Transactional(isolation = SERIALIZABLE)
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository repository;
@@ -32,21 +36,20 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper mapper;
 
     @Override
-    public ResponseEntity<CommentsDTO> getAllCommentsOfAd(int id) {
-        List<CommentDTO> list = repository.findCommentEntitiesByAd_Id(id)
+    public CommentsDTO getAllCommentsOfAd(int id) {
+        AdEntity ad = adService.getById(id);
+
+        List<CommentDTO> list = repository.findCommentEntitiesByAd(ad)
                 .stream()
                 .map(mapper::toCommentDTO)
                 .collect(Collectors.toList());
 
-        CommentsDTO dto = new CommentsDTO(list.size(), list);
-        return ResponseEntity.ok(dto);
+        return new CommentsDTO(list.size(), list);
     }
 
     @Override
-    public ResponseEntity<CommentDTO> addCommentToAd(int id, CreateOrUpdateCommentDTO dto,
-                                                     Authentication auth) {
-
-        UserEntity user = userService.getUser(auth.getName());
+    public CommentDTO addCommentToAd(int id, CreateOrUpdateCommentDTO dto) {
+        UserEntity user = userService.getUser();
         AdEntity ad = adService.getById(id);
         CommentEntity comment = mapper.toCommentEntity(dto);
 
@@ -55,36 +58,38 @@ public class CommentServiceImpl implements CommentService {
         comment.setAuthor(user);
 
         repository.save(comment);
-        return ResponseEntity.ok(mapper.toCommentDTO(comment));
+        return mapper.toCommentDTO(comment);
     }
 
     @Override
-    public ResponseEntity<?> deleteComment(int idAd, int idComment) {
-        List<CommentEntity> comments = repository.findCommentEntitiesByAd_Id(idAd);
-
-        for (CommentEntity comment : comments) {
-            if (comment.getId().equals(idComment)) {
-                repository.delete(comment);
-                return ResponseEntity.ok().build();
-            }
-        }
-        return ResponseEntity.status(NOT_FOUND).build();
+    @PreAuthorize(value = "hasRole('ADMIN')" +
+            "or @adServiceImpl.isAuthor(authentication.getName, #idAd)" +
+            "or @commentServiceImpl.isAuthor(authentication.getName, #idComment)")
+    public boolean deleteComment(int idAd, int idComment) {
+        repository.delete(getById(idComment, idAd));
+        return true;
     }
 
     @Override
-    public ResponseEntity<CommentDTO> updateComment(int idAd, int idComment,
-                                                    CreateOrUpdateCommentDTO dto) {
+    @PreAuthorize(value = "@commentServiceImpl.isAuthor(authentication.getName, #idComment)")
+    public CommentDTO updateComment(int idAd, int idComment,
+                                    CreateOrUpdateCommentDTO dto) {
 
-        List<CommentEntity> comments = repository.findCommentEntitiesByAd_Id(idAd);
+        CommentEntity comment = getById(idComment, idAd);
+        comment.setText(dto.getText());
+        comment.setCreatedAt(now());
+        repository.save(comment);
+        return mapper.toCommentDTO(comment);
+    }
 
-        for (CommentEntity comment : comments) {
-            if (comment.getId().equals(idComment)) {
-                comment.setText(dto.getText());
-                comment.setCreatedAt(now());
-                repository.save(comment);
-                return ResponseEntity.ok(mapper.toCommentDTO(comment));
-            }
-        }
-        return ResponseEntity.status(NOT_FOUND).build();
+    public boolean isAuthor(String username, int id) {
+        CommentEntity comment = repository.findById(id)
+                .orElseThrow(CommentNotFoundException::new);
+        return comment.getAuthor().getUsername().equals(username);
+    }
+
+    private CommentEntity getById(int idComment, int idAd) {
+        return repository.findCommentEntityByIdAndAd_Id(idComment, idAd)
+                .orElseThrow(CommentNotFoundException::new);
     }
 }

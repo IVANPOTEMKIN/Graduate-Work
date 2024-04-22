@@ -1,10 +1,13 @@
 package ru.skypro.homework.service;
 
+import ru.skypro.homework.dto.auth.LoginDTO;
 import ru.skypro.homework.dto.auth.RegisterDTO;
+
+import javax.validation.Valid;
 
 public interface AuthService {
 
-    boolean login(String username, String password);
+    boolean login(@Valid LoginDTO dto);
 
-    boolean register(RegisterDTO register);
+    boolean register(@Valid RegisterDTO dto);
 }

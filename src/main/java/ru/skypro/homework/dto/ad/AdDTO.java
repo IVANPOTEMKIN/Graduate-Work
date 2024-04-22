@@ -6,18 +6,18 @@ import lombok.Data;
 @Data
 public class AdDTO {
 
-    @Schema(description = "id автора объявления")
+    @Schema(description = "ID автора объявления")
     private Integer author;
 
-    @Schema(description = "ссылка на картинку объявления")
+    @Schema(description = "Ссылка на картинку объявления")
     private String image;
 
-    @Schema(description = "id объявления")
+    @Schema(description = "ID объявления")
     private Integer pk;
 
-    @Schema(description = "цена объявления")
+    @Schema(description = "Цена объявления")
     private Integer price;
 
-    @Schema(description = "заголовок объявления")
+    @Schema(description = "Заголовок объявления")
     private String title;
 }

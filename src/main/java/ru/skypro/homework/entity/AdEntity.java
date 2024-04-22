@@ -9,6 +9,9 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Entity
 @Getter
 @Setter
@@ -17,7 +20,7 @@ import java.util.Objects;
 public class AdEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id")
     private Integer id;
 
@@ -38,7 +41,8 @@ public class AdEntity {
     @JoinColumn(name = "user_id")
     private UserEntity author;
 
-    @OneToMany(mappedBy = "ad", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ad",
+            cascade = ALL)
     @JsonIgnore
     private List<CommentEntity> comments;
 

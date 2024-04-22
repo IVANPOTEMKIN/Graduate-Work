@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AdsDTO {
 
-    @Schema(description = "общее количество объявлений")
+    @Schema(description = "Общее количество объявлений")
     private Integer count;
 
     private List<AdDTO> results;

@@ -4,8 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,13 +13,13 @@ import ru.skypro.homework.dto.auth.LoginDTO;
 import ru.skypro.homework.dto.auth.RegisterDTO;
 import ru.skypro.homework.service.AuthService;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
 import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 
-@Slf4j
-@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(value = "http://localhost:3000")
 public class AuthController {
 
     private final AuthService authService;
@@ -36,22 +34,32 @@ public class AuthController {
                             content = @Content()
                     ),
                     @ApiResponse(
+                            responseCode = CODE_400,
+                            description = DESCRIPTION_CODE_400,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
                             responseCode = CODE_401,
                             description = DESCRIPTION_CODE_401,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_404,
+                            description = DESCRIPTION_CODE_404,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
                             content = @Content()
                     )
             }
     )
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO login) {
-
-        if (authService.login(login.getUsername(), login.getPassword())) {
-            return ResponseEntity.ok().build();
-
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
+        authService.login(dto);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
@@ -67,18 +75,18 @@ public class AuthController {
                             responseCode = CODE_400,
                             description = DESCRIPTION_CODE_400,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDTO register) {
-
-        if (authService.register(register)) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResponseEntity<?> register(@RequestBody RegisterDTO dto) {
+        authService.register(dto);
+        return ResponseEntity.status(CREATED).build();
     }
 }

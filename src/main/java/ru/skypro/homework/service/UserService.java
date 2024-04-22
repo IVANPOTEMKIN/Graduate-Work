@@ -1,25 +1,22 @@
 package ru.skypro.homework.service;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.auth.NewPasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.UserEntity;
 
+import javax.validation.Valid;
+
 public interface UserService {
 
-    ResponseEntity<?> updatePassword(NewPasswordDTO dto,
-                                  Authentication auth);
+    boolean updatePassword(@Valid NewPasswordDTO dto);
 
-    ResponseEntity<UserDTO> getInfoAboutUser(Authentication auth);
+    UserDTO getInfoAboutUser();
 
-    ResponseEntity<UpdateUserDTO> updateInfoAboutUser(UpdateUserDTO dto,
-                                      Authentication auth);
+    UpdateUserDTO updateInfoAboutUser(@Valid UpdateUserDTO dto);
 
-    ResponseEntity<?> updateAvatarOfUser(MultipartFile image,
-                            Authentication auth);
+    boolean updateAvatarOfUser(MultipartFile file);
 
-    UserEntity getUser(String username);
+    UserEntity getUser();
 }

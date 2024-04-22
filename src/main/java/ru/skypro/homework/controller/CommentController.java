@@ -5,9 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.comment.CommentDTO;
 import ru.skypro.homework.dto.comment.CommentsDTO;
@@ -18,11 +16,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
 import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 
-@Slf4j
-@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ads")
+@CrossOrigin(value = "http://localhost:3000")
 public class CommentController {
 
     private final CommentService service;
@@ -48,13 +45,18 @@ public class CommentController {
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<CommentsDTO> getAllCommentsOfAd(@PathVariable int id) {
-        return service.getAllCommentsOfAd(id);
+        return ResponseEntity.ok(service.getAllCommentsOfAd(id));
     }
 
     @Operation(
@@ -70,6 +72,11 @@ public class CommentController {
                             )
                     ),
                     @ApiResponse(
+                            responseCode = CODE_400,
+                            description = DESCRIPTION_CODE_400,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
                             responseCode = CODE_401,
                             description = DESCRIPTION_CODE_401,
                             content = @Content()
@@ -78,16 +85,20 @@ public class CommentController {
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDTO> addCommentToAd(@PathVariable int id,
-                                                     @RequestBody CreateOrUpdateCommentDTO dto,
-                                                     Authentication auth) {
+                                                     @RequestBody CreateOrUpdateCommentDTO dto) {
 
-        return service.addCommentToAd(id, dto, auth);
+        return ResponseEntity.ok(service.addCommentToAd(id, dto));
     }
 
     @Operation(
@@ -113,6 +124,11 @@ public class CommentController {
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
@@ -121,7 +137,8 @@ public class CommentController {
     public ResponseEntity<?> deleteComment(@PathVariable int adid,
                                            @PathVariable int commentid) {
 
-        return service.deleteComment(adid, commentid);
+        service.deleteComment(adid, commentid);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(
@@ -137,6 +154,11 @@ public class CommentController {
                             )
                     ),
                     @ApiResponse(
+                            responseCode = CODE_400,
+                            description = DESCRIPTION_CODE_400,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
                             responseCode = CODE_401,
                             description = DESCRIPTION_CODE_401,
                             content = @Content()
@@ -150,6 +172,11 @@ public class CommentController {
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
@@ -159,6 +186,6 @@ public class CommentController {
                                                     @PathVariable int commentid,
                                                     @RequestBody CreateOrUpdateCommentDTO dto) {
 
-        return service.updateComment(adid, commentid, dto);
+        return ResponseEntity.ok(service.updateComment(adid, commentid, dto));
     }
 }

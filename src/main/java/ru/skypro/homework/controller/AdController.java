@@ -6,9 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ad.AdDTO;
@@ -17,15 +15,16 @@ import ru.skypro.homework.dto.ad.CreateOrUpdateAdDTO;
 import ru.skypro.homework.dto.ad.ExtendedAdDTO;
 import ru.skypro.homework.service.AdService;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.*;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
 import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 
-@Slf4j
-@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ads")
+@CrossOrigin(value = "http://localhost:3000")
 public class AdController {
 
     private final AdService service;
@@ -41,13 +40,18 @@ public class AdController {
                                     mediaType = APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = AdsDTO.class)
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
 
     @GetMapping
     public ResponseEntity<AdsDTO> getAllAds() {
-        return service.getAllAds();
+        return ResponseEntity.ok(service.getAllAds());
     }
 
     @Operation(
@@ -63,19 +67,40 @@ public class AdController {
                             )
                     ),
                     @ApiResponse(
+                            responseCode = CODE_400,
+                            description = DESCRIPTION_CODE_400,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
                             responseCode = CODE_401,
                             description = DESCRIPTION_CODE_401,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_404,
+                            description = DESCRIPTION_CODE_404,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_417,
+                            description = DESCRIPTION_CODE_417,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
                             content = @Content()
                     )
             }
     )
 
-    @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDTO> AddAd(@RequestPart CreateOrUpdateAdDTO properties,
-                                       @RequestPart MultipartFile image,
-                                       Authentication auth) {
+    @PostMapping(consumes = {MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<AdDTO> addAd(@RequestPart(name = "properties")
+                                       CreateOrUpdateAdDTO dto,
+                                       @RequestPart(name = "image")
+                                       MultipartFile file) {
 
-        return service.AddAd(properties, image, auth);
+        return ResponseEntity.status(CREATED).body(service.addAd(dto, file));
     }
 
     @Operation(
@@ -99,13 +124,18 @@ public class AdController {
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
 
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAdDTO> getInfoAboutAd(@PathVariable int id) {
-        return service.getInfoAboutAd(id);
+        return ResponseEntity.ok(service.getInfoAboutAd(id));
     }
 
     @Operation(
@@ -131,13 +161,24 @@ public class AdController {
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_417,
+                            description = DESCRIPTION_CODE_417,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAd(@PathVariable int id) {
-        return service.deleteAd(id);
+        service.deleteAd(id);
+        return ResponseEntity.status(NO_CONTENT).build();
     }
 
     @Operation(
@@ -153,6 +194,11 @@ public class AdController {
                             )
                     ),
                     @ApiResponse(
+                            responseCode = CODE_400,
+                            description = DESCRIPTION_CODE_400,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
                             responseCode = CODE_401,
                             description = DESCRIPTION_CODE_401,
                             content = @Content()
@@ -166,6 +212,11 @@ public class AdController {
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
@@ -174,7 +225,7 @@ public class AdController {
     public ResponseEntity<AdDTO> updateInfoAboutAd(@PathVariable int id,
                                                    @RequestBody CreateOrUpdateAdDTO dto) {
 
-        return service.updateInfoAboutAd(id, dto);
+        return ResponseEntity.ok(service.updateInfoAboutAd(id, dto));
     }
 
     @Operation(
@@ -193,13 +244,23 @@ public class AdController {
                             responseCode = CODE_401,
                             description = DESCRIPTION_CODE_401,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_404,
+                            description = DESCRIPTION_CODE_404,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
 
     @GetMapping("/me")
-    public ResponseEntity<AdsDTO> getAllAdsOfUser(Authentication auth) {
-        return service.getAllAdsOfUser(auth);
+    public ResponseEntity<AdsDTO> getAllAdsOfUser() {
+        return ResponseEntity.ok(service.getAllAdsOfUser());
     }
 
     @Operation(
@@ -230,14 +291,25 @@ public class AdController {
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
                             content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_417,
+                            description = DESCRIPTION_CODE_417,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_500,
+                            description = DESCRIPTION_CODE_500,
+                            content = @Content()
                     )
             }
     )
 
-    @PatchMapping(value = "/{id}/image", consumes = MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/{id}/image", consumes = {MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> updateImageOfAd(@PathVariable int id,
-                                                  @RequestPart MultipartFile image) {
+                                                  @RequestPart(name = "image")
+                                                  MultipartFile file) {
 
-        return service.updateImageOfAd(id, image);
+        return ResponseEntity.ok(service.updateImageOfAd(id, file));
     }
 }
