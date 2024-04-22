@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ad.AdDTO;
@@ -99,10 +98,9 @@ public class AdController {
     public ResponseEntity<AdDTO> addAd(@RequestPart(name = "properties")
                                        CreateOrUpdateAdDTO dto,
                                        @RequestPart(name = "image")
-                                       MultipartFile file,
-                                       Authentication auth) {
+                                       MultipartFile file) {
 
-        return ResponseEntity.status(CREATED).body(service.addAd(dto, file, auth));
+        return ResponseEntity.status(CREATED).body(service.addAd(dto, file));
     }
 
     @Operation(
@@ -261,8 +259,8 @@ public class AdController {
     )
 
     @GetMapping("/me")
-    public ResponseEntity<AdsDTO> getAllAdsOfUser(Authentication auth) {
-        return ResponseEntity.ok(service.getAllAdsOfUser(auth));
+    public ResponseEntity<AdsDTO> getAllAdsOfUser() {
+        return ResponseEntity.ok(service.getAllAdsOfUser());
     }
 
     @Operation(

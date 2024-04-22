@@ -2,7 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -49,10 +48,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDTO addCommentToAd(int id, CreateOrUpdateCommentDTO dto,
-                                     Authentication auth) {
-
-        UserEntity user = userService.getUser(auth.getName());
+    public CommentDTO addCommentToAd(int id, CreateOrUpdateCommentDTO dto) {
+        UserEntity user = userService.getUser();
         AdEntity ad = adService.getById(id);
         CommentEntity comment = mapper.toCommentEntity(dto);
 
@@ -68,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
     @PreAuthorize(value = "hasRole('ADMIN')" +
             "or @adServiceImpl.isAuthor(authentication.getName, #idAd)" +
             "or @commentServiceImpl.isAuthor(authentication.getName, #idComment)")
-    public void deleteComment(int idAd, int idComment) {
+    public boolean deleteComment(int idAd, int idComment) {
         AdEntity ad = adService.getById(idAd);
         List<CommentEntity> comments = repository.findCommentEntitiesByAd(ad);
 
@@ -76,6 +73,7 @@ public class CommentServiceImpl implements CommentService {
 
             if (comment.getId().equals(idComment)) {
                 repository.delete(comment);
+                return true;
             }
         }
         throw new CommentNotFoundException();

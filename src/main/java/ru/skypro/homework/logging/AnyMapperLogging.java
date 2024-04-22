@@ -59,5 +59,6 @@ public class AnyMapperLogging {
         String methodClass = point.getSignature().getDeclaringType().getSimpleName();
         String message = exception.getMessage();
         log.error("Ошибка в работе метода {} маппера {}\n{}", methodName, methodClass, message);
+        exception.printStackTrace();
     }
 }

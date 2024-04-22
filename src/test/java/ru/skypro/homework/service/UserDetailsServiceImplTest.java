@@ -49,7 +49,7 @@ class UserDetailsServiceImplTest {
     }
 
     @Test
-    void loadUserByUsername_exception() {
+    void loadUserByUsername_UserNotFoundException() {
         when(repository.findUserEntityByUsername(anyString()))
                 .thenThrow(UserNotFoundException.class);
 

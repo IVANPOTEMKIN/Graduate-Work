@@ -2,7 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -49,11 +48,10 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public AdDTO addAd(CreateOrUpdateAdDTO dto,
-                       MultipartFile file,
-                       Authentication auth) {
+                       MultipartFile file) {
 
         AdEntity ad = mapper.toAdEntity(dto);
-        UserEntity user = userService.getUser(auth.getName());
+        UserEntity user = userService.getUser();
         ImageEntity image = imageService.saveImage(file);
 
         ad.setAuthor(user);
@@ -71,10 +69,11 @@ public class AdServiceImpl implements AdService {
     @Override
     @PreAuthorize(value = "hasRole('ADMIN')" +
             "or @adServiceImpl.isAuthor(authentication.getName, #id)")
-    public void deleteAd(int id) {
+    public boolean deleteAd(int id) {
         AdEntity ad = getById(id);
         repository.delete(ad);
         imageService.deleteImage(ad.getImage().getId());
+        return true;
     }
 
     @Override
@@ -91,8 +90,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public AdsDTO getAllAdsOfUser(Authentication auth) {
-        UserEntity user = userService.getUser(auth.getName());
+    public AdsDTO getAllAdsOfUser() {
+        UserEntity user = userService.getUser();
 
         List<AdDTO> list = repository.findAdEntitiesByAuthor(user)
                 .stream()

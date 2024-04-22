@@ -43,7 +43,6 @@ public class AnyServiceLogging {
     public void before(JoinPoint point) {
         String methodName = point.getSignature().getName();
         String methodClass = point.getSignature().getDeclaringType().getSimpleName();
-        log.info("=====================================================================================================");
         log.info("Начало работы метода {} сервиса {}", methodName, methodClass);
     }
 
@@ -78,7 +77,6 @@ public class AnyServiceLogging {
         String methodName = point.getSignature().getName();
         String methodClass = point.getSignature().getDeclaringType().getSimpleName();
         log.info("Конец работы метода {} сервиса {}", methodName, methodClass);
-        log.info("=====================================================================================================");
     }
 
     @AfterThrowing(value = "ru.skypro.homework.logging.service.AdServicePointCuts.getAllAds()" +
@@ -114,6 +112,6 @@ public class AnyServiceLogging {
         String methodClass = point.getSignature().getDeclaringType().getSimpleName();
         String message = exception.getMessage();
         log.error("Ошибка в работе метода {} сервиса {}\n{}", methodName, methodClass, message);
-        log.info("=====================================================================================================");
+        exception.printStackTrace();
     }
 }

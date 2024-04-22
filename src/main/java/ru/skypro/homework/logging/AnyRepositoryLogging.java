@@ -24,7 +24,6 @@ public class AnyRepositoryLogging {
     public void before(JoinPoint point) {
         String methodName = point.getSignature().getName();
         String methodClass = point.getSignature().getDeclaringType().getSimpleName();
-        log.info("=====================================================================================================");
         log.info("Начало работы метода {} репозитория {}", methodName, methodClass);
     }
 
@@ -41,6 +40,5 @@ public class AnyRepositoryLogging {
         String methodName = point.getSignature().getName();
         String methodClass = point.getSignature().getDeclaringType().getSimpleName();
         log.info("Конец работы метода {} репозитория {}", methodName, methodClass);
-        log.info("=====================================================================================================");
     }
 }

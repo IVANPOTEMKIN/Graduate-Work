@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.comment.CommentDTO;
 import ru.skypro.homework.dto.comment.CommentsDTO;
@@ -97,10 +96,9 @@ public class CommentController {
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentDTO> addCommentToAd(@PathVariable int id,
-                                                     @RequestBody CreateOrUpdateCommentDTO dto,
-                                                     Authentication auth) {
+                                                     @RequestBody CreateOrUpdateCommentDTO dto) {
 
-        return ResponseEntity.ok(service.addCommentToAd(id, dto, auth));
+        return ResponseEntity.ok(service.addCommentToAd(id, dto));
     }
 
     @Operation(

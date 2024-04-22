@@ -40,13 +40,14 @@ class ImageServiceImplTest {
 
     @Test
     void saveImage_successful() {
-        MultipartFile file = createFilePNG();
-        ImageEntity entity = createImageEntity();
+        ImageEntity expected = createImageEntity();
 
-        saveToDB(entity);
+        saveToDB(expected);
 
-        assertEquals(entity,
-                service.saveImage(file));
+        ImageEntity actual = service.saveImage(createFilePNG());
+
+        assertNotNull(actual);
+        assertEquals(expected, actual);
 
         verify(mapper, times(1))
                 .toImageEntity(any(MultipartFile.class));
@@ -56,13 +57,11 @@ class ImageServiceImplTest {
 
     @Test
     void saveImage_FailedRecordFileException() {
-        MultipartFile file = createFilePNG();
-
         when(mapper.toImageEntity(any(MultipartFile.class)))
                 .thenThrow(FailedRecordFileException.class);
 
         assertThrows(FailedRecordFileException.class,
-                () -> service.saveImage(file));
+                () -> service.saveImage(createFilePNG()));
 
         verify(mapper, times(1))
                 .toImageEntity(any(MultipartFile.class));
@@ -72,13 +71,13 @@ class ImageServiceImplTest {
 
     @Test
     void downloadImage_successful() {
-        MultipartFile file = createFilePNG();
-        ImageEntity entity = createImageEntity();
+        saveImage(createFilePNG(), createImageEntity());
 
-        saveImage(file, entity);
+        byte[] expected = createImageEntity().getData();
+        byte[] actual = service.downloadImage(anyInt());
 
-        assertArrayEquals(entity.getData(),
-                service.downloadImage(anyInt()));
+        assertNotNull(actual);
+        assertArrayEquals(expected, actual);
 
         verify(repository, times(1))
                 .findById(anyInt());
@@ -108,13 +107,9 @@ class ImageServiceImplTest {
 
     @Test
     void deleteImage_successful() {
-        MultipartFile file = createFilePNG();
-        ImageEntity entity = createImageEntity();
+        saveImage(createFilePNG(), createImageEntity());
 
-        saveImage(file, entity);
-
-        service.deleteImage(anyInt());
-
+        assertTrue(service.deleteImage(anyInt()));
         assertThrows(FilePathNotFoundException.class,
                 () -> service.deleteImage(anyInt()));
         assertThrows(FilePathNotFoundException.class,

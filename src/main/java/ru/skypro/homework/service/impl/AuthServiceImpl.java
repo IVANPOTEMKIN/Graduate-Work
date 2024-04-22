@@ -30,16 +30,17 @@ public class AuthServiceImpl implements AuthService {
     private final UserDetailsService detailsService;
 
     @Override
-    public void login(LoginDTO dto) {
+    public boolean login(LoginDTO dto) {
         UserDetails details = detailsService.loadUserByUsername(dto.getUsername());
 
         if (!encoder.matches(dto.getPassword(), details.getPassword())) {
             throw new WrongPasswordException();
         }
+        return true;
     }
 
     @Override
-    public void register(RegisterDTO dto) {
+    public boolean register(RegisterDTO dto) {
         UserEntity user = mapper.toUserEntity(dto);
 
         if (repository.findUserEntityByUsername(user.getUsername()).isPresent()) {
@@ -48,5 +49,6 @@ public class AuthServiceImpl implements AuthService {
 
         user.setPassword(encoder.encode(user.getPassword()));
         repository.save(user);
+        return true;
     }
 }

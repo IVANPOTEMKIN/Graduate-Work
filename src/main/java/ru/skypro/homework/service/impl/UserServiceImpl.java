@@ -1,7 +1,7 @@
 package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,26 +34,23 @@ public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
 
     @Override
-    public void updatePassword(NewPasswordDTO dto,
-                               Authentication auth) {
-
-        UserEntity user = getUser(auth.getName());
+    public boolean updatePassword(NewPasswordDTO dto) {
+        UserEntity user = getUser();
         String password = checkPasswords(dto, user);
         user.setPassword(encoder.encode(password));
         repository.save(user);
+        return true;
     }
 
     @Override
-    public UserDTO getInfoAboutUser(Authentication auth) {
-        UserEntity user = getUser(auth.getName());
+    public UserDTO getInfoAboutUser() {
+        UserEntity user = getUser();
         return mapper.toUserDTO(user);
     }
 
     @Override
-    public UpdateUserDTO updateInfoAboutUser(UpdateUserDTO dto,
-                                             Authentication auth) {
-
-        UserEntity user = getUser(auth.getName());
+    public UpdateUserDTO updateInfoAboutUser(UpdateUserDTO dto) {
+        UserEntity user = getUser();
 
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
@@ -64,18 +61,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateAvatarOfUser(MultipartFile file,
-                                   Authentication auth) {
-
-        UserEntity user = getUser(auth.getName());
+    public boolean updateAvatarOfUser(MultipartFile file) {
+        UserEntity user = getUser();
         ImageEntity avatar = imageService.saveImage(file);
         user.setAvatar(avatar);
         repository.save(user);
+        return true;
     }
 
     @Override
-    public UserEntity getUser(String username) {
-        return repository.findUserEntityByUsername(username)
+    public UserEntity getUser() {
+        return repository.findUserEntityByUsername(getCurrentUsername())
                 .orElseThrow(UserNotFoundException::new);
     }
 
@@ -93,5 +89,9 @@ public class UserServiceImpl implements UserService {
         }
 
         return newPassword;
+    }
+
+    private String getCurrentUsername() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

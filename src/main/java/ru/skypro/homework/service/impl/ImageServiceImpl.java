@@ -56,7 +56,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void deleteImage(int id) {
+    public boolean deleteImage(int id) {
         ImageEntity image = getImage(id);
         Path path = Path.of(image.getPath());
 
@@ -67,6 +67,7 @@ public class ImageServiceImpl implements ImageService {
         }
 
         repository.delete(image);
+        return true;
     }
 
     private ImageEntity saveToDB(MultipartFile file, Path path) {
@@ -81,7 +82,6 @@ public class ImageServiceImpl implements ImageService {
     }
 
     private Path savePath(MultipartFile file) throws IOException {
-
         Path path = createPath(file);
 
         Files.createDirectories(path.getParent());
@@ -100,7 +100,6 @@ public class ImageServiceImpl implements ImageService {
     }
 
     private Path createPath(MultipartFile file) {
-
         Random random = new Random();
 
         return Path.of(directory, file.getName().hashCode() * file.getSize() * random.nextInt(100)

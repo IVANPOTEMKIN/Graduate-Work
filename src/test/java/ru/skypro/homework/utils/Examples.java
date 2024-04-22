@@ -5,8 +5,12 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ad.CreateOrUpdateAdDTO;
+import ru.skypro.homework.dto.auth.LoginDTO;
+import ru.skypro.homework.dto.auth.NewPasswordDTO;
 import ru.skypro.homework.dto.auth.RegisterDTO;
 import ru.skypro.homework.dto.comment.CreateOrUpdateCommentDTO;
+import ru.skypro.homework.dto.user.UpdateUserDTO;
+import ru.skypro.homework.dto.user.UserDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.ImageEntity;
@@ -14,6 +18,7 @@ import ru.skypro.homework.entity.UserEntity;
 
 import static java.time.LocalDateTime.MIN;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
+import static ru.skypro.homework.constants.URL.USER;
 import static ru.skypro.homework.dto.Role.ADMIN;
 import static ru.skypro.homework.utils.Constants.*;
 
@@ -84,6 +89,48 @@ public class Examples {
         dto.setLastName(LAST_NAME);
         dto.setPhone(PHONE_NUMBER);
         dto.setRole(ADMIN);
+
+        return dto;
+    }
+
+    public static LoginDTO createLoginDTO() {
+        LoginDTO dto = new LoginDTO();
+
+        dto.setUsername(USERNAME);
+        dto.setPassword(PASSWORD);
+
+        return dto;
+    }
+
+    public static NewPasswordDTO createNewPasswordDTO() {
+        NewPasswordDTO dto = new NewPasswordDTO();
+
+        dto.setCurrentPassword(PASSWORD);
+        dto.setNewPassword(NEW_PASSWORD);
+
+        return dto;
+    }
+
+    public static UserDTO createUserDTO() {
+        UserDTO dto = new UserDTO();
+
+        dto.setId(ID);
+        dto.setEmail(USERNAME);
+        dto.setFirstName(FIRST_NAME);
+        dto.setLastName(LAST_NAME);
+        dto.setPhone(PHONE_NUMBER);
+        dto.setRole(ADMIN);
+        dto.setImage(USER.getUrl() + ID);
+
+        return dto;
+    }
+
+    public static UpdateUserDTO createUpdateUserDTO() {
+        UpdateUserDTO dto = new UpdateUserDTO();
+
+        dto.setFirstName(NEW_FIRST_NAME);
+        dto.setLastName(NEW_LAST_NAME);
+        dto.setPhone(NEW_PHONE_NUMBER);
 
         return dto;
     }

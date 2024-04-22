@@ -1,6 +1,5 @@
 package ru.skypro.homework.service;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.ad.AdDTO;
 import ru.skypro.homework.dto.ad.AdsDTO;
@@ -15,16 +14,15 @@ public interface AdService {
     AdsDTO getAllAds();
 
     AdDTO addAd(@Valid CreateOrUpdateAdDTO dto,
-                MultipartFile file,
-                Authentication auth);
+                MultipartFile file);
 
     ExtendedAdDTO getInfoAboutAd(int id);
 
-    void deleteAd(int id);
+    boolean deleteAd(int id);
 
     AdDTO updateInfoAboutAd(int id, @Valid CreateOrUpdateAdDTO dto);
 
-    AdsDTO getAllAdsOfUser(Authentication auth);
+    AdsDTO getAllAdsOfUser();
 
     String updateImageOfAd(int id, MultipartFile file);
 

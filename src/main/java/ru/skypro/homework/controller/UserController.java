@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.auth.NewPasswordDTO;
@@ -60,10 +59,8 @@ public class UserController {
     )
 
     @PostMapping("/set_password")
-    public ResponseEntity<?> updatePassword(@RequestBody NewPasswordDTO dto,
-                                            Authentication auth) {
-
-        service.updatePassword(dto, auth);
+    public ResponseEntity<?> updatePassword(@RequestBody NewPasswordDTO dto) {
+        service.updatePassword(dto);
         return ResponseEntity.ok().build();
     }
 
@@ -98,8 +95,8 @@ public class UserController {
     )
 
     @GetMapping("/me")
-    public ResponseEntity<UserDTO> getInfoAboutUser(Authentication auth) {
-        return ResponseEntity.ok(service.getInfoAboutUser(auth));
+    public ResponseEntity<UserDTO> getInfoAboutUser() {
+        return ResponseEntity.ok(service.getInfoAboutUser());
     }
 
     @Operation(
@@ -138,10 +135,8 @@ public class UserController {
     )
 
     @PatchMapping("/me")
-    public ResponseEntity<UpdateUserDTO> updateInfoAboutUser(@RequestBody UpdateUserDTO dto,
-                                                             Authentication auth) {
-
-        return ResponseEntity.ok(service.updateInfoAboutUser(dto, auth));
+    public ResponseEntity<UpdateUserDTO> updateInfoAboutUser(@RequestBody UpdateUserDTO dto) {
+        return ResponseEntity.ok(service.updateInfoAboutUser(dto));
     }
 
     @Operation(
@@ -178,10 +173,9 @@ public class UserController {
 
     @PatchMapping(value = "/me/image", consumes = {MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> updateAvatarOfUser(@RequestParam(name = "image")
-                                                MultipartFile file,
-                                                Authentication auth) {
+                                                MultipartFile file) {
 
-        service.updateAvatarOfUser(file, auth);
+        service.updateAvatarOfUser(file);
         return ResponseEntity.ok().build();
     }
 }

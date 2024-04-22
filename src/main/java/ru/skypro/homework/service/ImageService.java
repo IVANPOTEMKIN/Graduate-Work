@@ -9,5 +9,5 @@ public interface ImageService {
 
     byte[] downloadImage(int id);
 
-    void deleteImage(int id);
+    boolean deleteImage(int id);
 }
