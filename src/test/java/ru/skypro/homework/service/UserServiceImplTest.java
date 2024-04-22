@@ -55,7 +55,7 @@ class UserServiceImplTest {
 
     @Test
     void updatePassword_successful() {
-        getUserByUsername_successful();
+        getUserByUsername();
 
         UserEntity user = createUserEntity();
         NewPasswordDTO dto = createNewPasswordDTO();
@@ -96,7 +96,7 @@ class UserServiceImplTest {
 
     @Test
     void updatePassword_WrongPasswordException() {
-        getUserByUsername_successful();
+        getUserByUsername();
 
         UserEntity user = createUserEntity();
         NewPasswordDTO dto = createNewPasswordDTO();
@@ -121,7 +121,7 @@ class UserServiceImplTest {
 
     @Test
     void updatePassword_ReusePasswordException() {
-        getUserByUsername_successful();
+        getUserByUsername();
 
         UserEntity user = createUserEntity();
         NewPasswordDTO dto = createNewPasswordDTO();
@@ -148,7 +148,7 @@ class UserServiceImplTest {
 
     @Test
     void getInfoAboutUser_successful() {
-        getUserByUsername_successful();
+        getUserByUsername();
 
         when(mapper.toUserDTO(any(UserEntity.class)))
                 .thenReturn(createUserDTO());
@@ -178,7 +178,7 @@ class UserServiceImplTest {
 
     @Test
     void updateInfoAboutUser_successful() {
-        getUserByUsername_successful();
+        getUserByUsername();
 
         when(mapper.toUpdateUserDTO(any(UserEntity.class)))
                 .thenReturn(createUpdateUserDTO());
@@ -212,7 +212,7 @@ class UserServiceImplTest {
 
     @Test
     void updateAvatarOfUser_successful() {
-        getUserByUsername_successful();
+        getUserByUsername();
 
         MultipartFile file = createFilePNG();
 
@@ -244,7 +244,7 @@ class UserServiceImplTest {
 
     @Test
     void updateAvatarOfUser_FailedSaveFileException() {
-        getUserByUsername_successful();
+        getUserByUsername();
 
         MultipartFile file = createFilePNG();
 
@@ -264,7 +264,7 @@ class UserServiceImplTest {
 
     @Test
     void updateAvatarOfUser_FailedRecordFileException() {
-        getUserByUsername_successful();
+        getUserByUsername();
 
         MultipartFile file = createFilePNG();
 
@@ -284,7 +284,7 @@ class UserServiceImplTest {
 
     @Test
     void getUser_successful() {
-        getUserByUsername_successful();
+        getUserByUsername();
 
         UserEntity expected = createUserEntity();
         UserEntity actual = userService.getUser();
@@ -305,7 +305,7 @@ class UserServiceImplTest {
                 .findUserEntityByUsername(anyString());
     }
 
-    private void getUserByUsername_successful() {
+    private void getUserByUsername() {
         when(repository.findUserEntityByUsername(anyString()))
                 .thenReturn(Optional.of(createUserEntity()));
     }

@@ -3,6 +3,11 @@ package ru.skypro.homework.utils;
 public class Constants {
 
     public static final int ID = 1;
+    public static final String PATH = "path";
+    public static final long SIZE = 1000L;
+    public static final byte[] BYTES = "bytes".getBytes();
+    public static final String FILE_NAME = "file";
+    public static final String ORIGINAL_FILE_NAME = "image.png";
     public static final String USERNAME = "user@gmail.com";
     public static final String PASSWORD = "password";
     public static final String NEW_PASSWORD = "new_password";

@@ -111,7 +111,6 @@ class AuthServiceImplTest {
     void register_UserAlreadyAddedException() {
         when(mapper.toUserEntity(any(RegisterDTO.class)))
                 .thenReturn(createUserEntity());
-
         when(repository.findUserEntityByUsername(anyString()))
                 .thenReturn(Optional.of(createUserEntity()));
 

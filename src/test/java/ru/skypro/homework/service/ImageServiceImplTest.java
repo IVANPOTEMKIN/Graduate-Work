@@ -85,8 +85,6 @@ class ImageServiceImplTest {
 
     @Test
     void downloadImage_ImageNotFoundException() {
-        getImageById_Exception();
-
         assertThrows(ImageNotFoundException.class,
                 () -> service.downloadImage(anyInt()));
 
@@ -96,7 +94,7 @@ class ImageServiceImplTest {
 
     @Test
     void downloadImage_FilePathNotFoundException() {
-        getImageById_Successful(createImageEntity());
+        getImageById(createImageEntity());
 
         assertThrows(FilePathNotFoundException.class,
                 () -> service.downloadImage(anyInt()));
@@ -123,8 +121,6 @@ class ImageServiceImplTest {
 
     @Test
     void deleteImage_ImageNotFoundException() {
-        getImageById_Exception();
-
         assertThrows(ImageNotFoundException.class,
                 () -> service.deleteImage(anyInt()));
 
@@ -136,7 +132,7 @@ class ImageServiceImplTest {
 
     @Test
     void deleteImage_FilePathNotFoundException() {
-        getImageById_Successful(createImageEntity());
+        getImageById(createImageEntity());
 
         assertThrows(FilePathNotFoundException.class,
                 () -> service.deleteImage(anyInt()));
@@ -150,7 +146,7 @@ class ImageServiceImplTest {
     private void saveImage(MultipartFile file, ImageEntity entity) {
         saveToDB(entity);
         entity.setPath(service.saveImage(file).getPath());
-        getImageById_Successful(entity);
+        getImageById(entity);
     }
 
     private void saveToDB(ImageEntity entity) {
@@ -160,13 +156,8 @@ class ImageServiceImplTest {
                 .thenReturn(entity);
     }
 
-    private void getImageById_Successful(ImageEntity entity) {
+    private void getImageById(ImageEntity entity) {
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.of(entity));
-    }
-
-    private void getImageById_Exception() {
-        when(repository.findById(anyInt()))
-                .thenThrow(ImageNotFoundException.class);
     }
 }

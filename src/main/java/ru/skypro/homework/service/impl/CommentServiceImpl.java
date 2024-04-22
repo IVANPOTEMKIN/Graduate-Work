@@ -66,17 +66,8 @@ public class CommentServiceImpl implements CommentService {
             "or @adServiceImpl.isAuthor(authentication.getName, #idAd)" +
             "or @commentServiceImpl.isAuthor(authentication.getName, #idComment)")
     public boolean deleteComment(int idAd, int idComment) {
-        AdEntity ad = adService.getById(idAd);
-        List<CommentEntity> comments = repository.findCommentEntitiesByAd(ad);
-
-        for (CommentEntity comment : comments) {
-
-            if (comment.getId().equals(idComment)) {
-                repository.delete(comment);
-                return true;
-            }
-        }
-        throw new CommentNotFoundException();
+        repository.delete(getById(idComment, idAd));
+        return true;
     }
 
     @Override
@@ -84,24 +75,21 @@ public class CommentServiceImpl implements CommentService {
     public CommentDTO updateComment(int idAd, int idComment,
                                     CreateOrUpdateCommentDTO dto) {
 
-        AdEntity ad = adService.getById(idAd);
-        List<CommentEntity> comments = repository.findCommentEntitiesByAd(ad);
-
-        for (CommentEntity comment : comments) {
-
-            if (comment.getId().equals(idComment)) {
-                comment.setText(dto.getText());
-                comment.setCreatedAt(now());
-                repository.save(comment);
-            }
-            return mapper.toCommentDTO(comment);
-        }
-        throw new CommentNotFoundException();
+        CommentEntity comment = getById(idComment, idAd);
+        comment.setText(dto.getText());
+        comment.setCreatedAt(now());
+        repository.save(comment);
+        return mapper.toCommentDTO(comment);
     }
 
     public boolean isAuthor(String username, int id) {
         CommentEntity comment = repository.findById(id)
                 .orElseThrow(CommentNotFoundException::new);
         return comment.getAuthor().getUsername().equals(username);
+    }
+
+    private CommentEntity getById(int idComment, int idAd) {
+        return repository.findCommentEntityByIdAndAd_Id(idComment, idAd)
+                .orElseThrow(CommentNotFoundException::new);
     }
 }
