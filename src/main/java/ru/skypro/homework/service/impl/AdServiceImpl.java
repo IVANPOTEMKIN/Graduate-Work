@@ -117,6 +117,13 @@ public class AdServiceImpl implements AdService {
                 .orElseThrow(AdNotFoundException::new);
     }
 
+    /**
+     * Проверка соответствия автора объявления с текущим пользователем
+     *
+     * @param username <code> Authentication.getName </code>
+     * @param id       <i> ID объявления </i>
+     * @return {@link Boolean} <i> Результат выполнения метода </i>
+     */
     public boolean isAuthor(String username, int id) {
         AdEntity ad = getById(id);
         return ad.getAuthor().getUsername().equals(username);

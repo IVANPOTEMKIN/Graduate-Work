@@ -82,12 +82,26 @@ public class CommentServiceImpl implements CommentService {
         return mapper.toCommentDTO(comment);
     }
 
+    /**
+     * Проверка соответствия автора комментария с текущим пользователем
+     *
+     * @param username <code> Authentication.getName </code>
+     * @param id       <i> ID комментария </i>
+     * @return {@link Boolean} <i> Результат выполнения метода </i>
+     */
     public boolean isAuthor(String username, int id) {
         CommentEntity comment = repository.findById(id)
                 .orElseThrow(CommentNotFoundException::new);
         return comment.getAuthor().getUsername().equals(username);
     }
 
+    /**
+     * Получение комментария по ID объявления и комментария
+     *
+     * @param idComment <i> ID комментария </i>
+     * @param idAd      <i> ID объявления </i>
+     * @return {@link CommentEntity}
+     */
     private CommentEntity getById(int idComment, int idAd) {
         return repository.findCommentEntityByIdAndAd_Id(idComment, idAd)
                 .orElseThrow(CommentNotFoundException::new);

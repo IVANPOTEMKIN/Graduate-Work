@@ -10,6 +10,13 @@ import java.util.Objects;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+/**
+ * <code> <b> id </b> </code> <i> ID комментария </i> <br>
+ * <code> <b> createdAt </b> </code> <i> Дата и время создания комментария </i> <br>
+ * <code> <b> text </b> </code> <i> Текст комментария </i> <br>
+ * <code> <b> ad </b> </code> {@link AdEntity} <br>
+ * <code> <b> author </b> </code> {@link UserEntity} <br>
+ */
 @Entity
 @Getter
 @Setter

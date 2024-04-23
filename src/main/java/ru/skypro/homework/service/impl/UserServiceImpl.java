@@ -75,6 +75,13 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(UserNotFoundException::new);
     }
 
+    /**
+     * Выполнение проверок при смене пароля
+     *
+     * @param dto  {@link NewPasswordDTO}
+     * @param user {@link UserEntity}
+     * @return {@link String} <i> Корректный пароль </i>
+     */
     private String checkPasswords(NewPasswordDTO dto,
                                   UserEntity user) {
 
@@ -91,6 +98,11 @@ public class UserServiceImpl implements UserService {
         return newPassword;
     }
 
+    /**
+     * Получение логина текущего пользователя
+     *
+     * @return {@link String} <i> Логин текущего пользователя </i>
+     */
     private String getCurrentUsername() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }

@@ -11,6 +11,13 @@ import java.util.Objects;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+/**
+ * <code> <b> id </b> </code> <i> ID изображения </i> <br>
+ * <code> <b> path </b> </code> <i> Путь локального хранения изображения</i> <br>
+ * <code> <b> size </b> </code> <i> Размер изображения </i> <br>
+ * <code> <b> type </b> </code> <code> ContentType </code> <i> изображения </i> <br>
+ * <code> <b> data </b> </code> <i> Поток байтов (сериализация) изображения </i> <br>
+ */
 @Entity
 @Getter
 @Setter

@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * <code> <b> count </b> </code> <i> Общее количество объявлений </i> <br>
- * <code> <b> results </b> </code> <i> Список AdDTO </i> <br>
+ * <code> <b> results </b> </code> <code> List<{@link AdDTO}> </code> <br>
  */
 @Data
 @AllArgsConstructor

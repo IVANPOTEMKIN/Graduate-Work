@@ -12,6 +12,15 @@ import java.util.Objects;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.GenerationType.IDENTITY;
 
+/**
+ * <code> <b> id </b> </code> <i> ID объявления </i> <br>
+ * <code> <b> title </b> </code> <i> Заголовок объявления </i> <br>
+ * <code> <b> price </b> </code> <i> Цена объявления </i> <br>
+ * <code> <b> description </b> </code> <i> Описание объявления </i> <br>
+ * <code> <b> image </b> </code> {@link ImageEntity} <br>
+ * <code> <b> author </b> </code> {@link UserEntity} <br>
+ * <code> <b> comments </b> </code> <code> List<{@link CommentEntity}> </code> <br>
+ */
 @Entity
 @Getter
 @Setter
