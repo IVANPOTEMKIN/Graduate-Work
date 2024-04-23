@@ -7,6 +7,11 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
+/**
+ * <code> <b> title </b></code> <i> Заголовок объявления </i> <br>
+ * <code> <b> price </b></code> <i> Цена объявления </i> <br>
+ * <code> <b> description </b></code> <i> Описание объявления </i> <br>
+ */
 @Data
 public class CreateOrUpdateAdDTO {
 

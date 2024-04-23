@@ -5,6 +5,14 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * <code> <b> author </b> </code> <i> ID автора комментария </i> <br>
+ * <code> <b> authorImage </b> </code> <i> Ссылка на аватар автора комментария </i> <br>
+ * <code> <b> authorFirstName </b> </code> <i> Имя создателя комментария </i> <br>
+ * <code> <b> createdAt </b> </code> <i> Дата и время создания комментария </i> <br>
+ * <code> <b> pk </b> </code> <i> ID комментария </i> <br>
+ * <code> <b> text </b> </code> <i> Текст комментария </i> <br>
+ */
 @Data
 public class CommentDTO {
 

@@ -6,6 +6,10 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * <code> <b> count </b> </code> <i> Общее количество комментариев </i> <br>
+ * <code> <b> results </b> </code> <i> Список CommentDTO </i> <br>
+ */
 @Data
 @AllArgsConstructor
 public class CommentsDTO {

@@ -5,6 +5,9 @@ import lombok.Data;
 
 import javax.validation.constraints.Size;
 
+/**
+ * <code> <b> text </b> </code> <i> Текст комментария </i> <br>
+ */
 @Data
 public class CreateOrUpdateCommentDTO {
 

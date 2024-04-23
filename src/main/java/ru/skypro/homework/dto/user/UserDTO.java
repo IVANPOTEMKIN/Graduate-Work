@@ -4,6 +4,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
+/**
+ * <code> <b> id </b> </code> <i> ID пользователя </i> <br
+ * <code> <b> email </b> </code> <i> Логин пользователя </i> <br
+ * <code> <b> firstName </b> </code> <i> Имя пользователя </i> <br
+ * <code> <b> lastName </b> </code> <i> Фамилия пользователя </i> <br
+ * <code> <b> phone </b> </code> <i> Телефон пользователя </i> <br
+ * <code> <b> role </b> </code> <i> Роль пользователя </i> <br
+ * <code> <b> image </b> </code> <i> Ссылка на аватар пользователя </i> <br
+ */
 @Data
 public class UserDTO {
 

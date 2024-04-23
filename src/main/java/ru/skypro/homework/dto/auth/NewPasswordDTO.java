@@ -5,6 +5,10 @@ import lombok.Data;
 
 import javax.validation.constraints.Size;
 
+/**
+ * <code> <b> currentPassword </b> </code> <i> Текущий пароль </i> <br>
+ * <code> <b> newPassword </b> </code> <i> Новый пароль </i> <br>
+ */
 @Data
 public class NewPasswordDTO {
 

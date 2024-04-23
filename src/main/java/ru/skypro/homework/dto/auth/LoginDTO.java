@@ -5,6 +5,10 @@ import lombok.Data;
 
 import javax.validation.constraints.Size;
 
+/**
+ * <code> <b> username </b> </code> <i> Логин </i> <br>
+ * <code> <b> password </b> </code> <i> Пароль </i> <br>
+ */
 @Data
 public class LoginDTO {
 

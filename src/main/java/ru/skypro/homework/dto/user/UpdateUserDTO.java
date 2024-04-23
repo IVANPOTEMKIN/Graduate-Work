@@ -6,6 +6,11 @@ import lombok.Data;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * <code> <b> firstName </b> </code> <i> Имя пользователя </i> <br>
+ * <code> <b> lastName </b> </code> <i> Фамилия пользователя </i> <br>
+ * <code> <b> phone </b> </code> <i> Телефон пользователя </i> <br>
+ */
 @Data
 public class UpdateUserDTO {
 

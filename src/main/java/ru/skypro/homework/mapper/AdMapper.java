@@ -7,9 +7,18 @@ import ru.skypro.homework.entity.AdEntity;
 
 public interface AdMapper {
 
+    /**
+     * {@link AdEntity} -> {@link AdDTO}
+     */
     AdDTO toAdDTO(AdEntity entity);
 
+    /**
+     * {@link AdEntity} -> {@link ExtendedAdDTO}
+     */
     ExtendedAdDTO toExtendedAdDTO(AdEntity entity);
 
+    /**
+     * {@link CreateOrUpdateAdDTO} -> {@link AdEntity}
+     */
     AdEntity toAdEntity(CreateOrUpdateAdDTO dto);
 }

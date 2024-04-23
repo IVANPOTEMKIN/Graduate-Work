@@ -6,7 +6,13 @@ import ru.skypro.homework.entity.CommentEntity;
 
 public interface CommentMapper {
 
+    /**
+     * {@link CommentEntity} -> {@link CommentDTO}
+     */
     CommentDTO toCommentDTO(CommentEntity entity);
 
+    /**
+     * {@link CreateOrUpdateCommentDTO} -> {@link CommentEntity}
+     */
     CommentEntity toCommentEntity(CreateOrUpdateCommentDTO dto);
 }

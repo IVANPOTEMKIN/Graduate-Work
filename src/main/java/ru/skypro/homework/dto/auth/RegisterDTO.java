@@ -7,6 +7,14 @@ import ru.skypro.homework.dto.Role;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * <code> <b> username </b> </code> <i> Логин </i> <br>
+ * <code> <b> password </b> </code> <i> Пароль </i> <br>
+ * <code> <b> firstName </b> </code> <i> Имя пользователя </i> <br>
+ * <code> <b> lastName </b> </code> <i> Фамилия пользователя </i> <br>
+ * <code> <b> phone </b> </code> <i> Телефон пользователя </i> <br>
+ * <code> <b> role </b> </code> <i> Роль пользователя </i> <br>
+ */
 @Data
 public class RegisterDTO {
 
