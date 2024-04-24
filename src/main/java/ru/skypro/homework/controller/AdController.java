@@ -42,6 +42,11 @@ public class AdController {
                             )
                     ),
                     @ApiResponse(
+                            responseCode = CODE_401,
+                            description = DESCRIPTION_CODE_401,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
                             responseCode = CODE_500,
                             description = DESCRIPTION_CODE_500,
                             content = @Content()
@@ -74,6 +79,11 @@ public class AdController {
                     @ApiResponse(
                             responseCode = CODE_401,
                             description = DESCRIPTION_CODE_401,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_403,
+                            description = DESCRIPTION_CODE_403,
                             content = @Content()
                     ),
                     @ApiResponse(
