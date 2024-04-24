@@ -1,7 +1,9 @@
 package ru.skypro.homework.dto.ad;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <code> <b> pk </b> </code> <i> ID объявления </i> <br>
@@ -15,6 +17,8 @@ import lombok.Data;
  * <code> <b> title </b> </code> <i> Заголовок объявления </i> <br>
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ExtendedAdDTO {
 
     @Schema(description = "ID объявления")

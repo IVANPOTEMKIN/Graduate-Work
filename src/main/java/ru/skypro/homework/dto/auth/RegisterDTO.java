@@ -1,7 +1,9 @@
 package ru.skypro.homework.dto.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.skypro.homework.dto.Role;
 
 import javax.validation.constraints.Pattern;
@@ -16,6 +18,8 @@ import javax.validation.constraints.Size;
  * <code> <b> role </b> </code> <i> Роль пользователя </i> <br>
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RegisterDTO {
 
     @Schema(description = "Логин")

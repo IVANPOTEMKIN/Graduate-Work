@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.skypro.homework.dto.auth.RegisterDTO;
 import ru.skypro.homework.entity.UserEntity;
@@ -16,6 +15,7 @@ import ru.skypro.homework.exception.user.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.impl.AuthServiceImpl;
+import ru.skypro.homework.service.impl.UserDetailsServiceImpl;
 
 import java.util.Optional;
 
@@ -32,17 +32,17 @@ class AuthServiceImplTest {
     @Mock
     private PasswordEncoder encoder;
     @Mock
-    private UserRepository repository;
+    private UserRepository userRepository;
     @Mock
-    private UserMapper mapper;
+    private UserMapper userMapper;
     @Mock
-    private UserDetailsService detailsService;
+    private UserDetailsServiceImpl detailsService;
     @InjectMocks
     private AuthServiceImpl authService;
 
     @BeforeEach
     void setUp() {
-        authService = new AuthServiceImpl(encoder, repository, mapper, detailsService);
+        authService = new AuthServiceImpl(encoder, userRepository, userMapper, detailsService);
     }
 
     @Test
@@ -92,38 +92,38 @@ class AuthServiceImplTest {
 
     @Test
     void register_successful() {
-        when(mapper.toUserEntity(any(RegisterDTO.class)))
+        when(userMapper.toUserEntity(any(RegisterDTO.class)))
                 .thenReturn(createUserEntity());
 
         assertTrue(authService.register(createRegisterDTO()));
 
-        verify(mapper, times(1))
+        verify(userMapper, times(1))
                 .toUserEntity(any(RegisterDTO.class));
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
         verify(encoder, times(1))
                 .encode(anyString());
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .save(any(UserEntity.class));
     }
 
     @Test
     void register_UserAlreadyAddedException() {
-        when(mapper.toUserEntity(any(RegisterDTO.class)))
+        when(userMapper.toUserEntity(any(RegisterDTO.class)))
                 .thenReturn(createUserEntity());
-        when(repository.findUserEntityByUsername(anyString()))
+        when(userRepository.findUserEntityByUsername(anyString()))
                 .thenReturn(Optional.of(createUserEntity()));
 
         assertThrows(UserAlreadyAddedException.class,
                 () -> authService.register(createRegisterDTO()));
 
-        verify(mapper, times(1))
+        verify(userMapper, times(1))
                 .toUserEntity(any(RegisterDTO.class));
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
         verify(encoder, times(0))
                 .encode(anyString());
-        verify(repository, times(0))
+        verify(userRepository, times(0))
                 .save(any(UserEntity.class));
     }
 

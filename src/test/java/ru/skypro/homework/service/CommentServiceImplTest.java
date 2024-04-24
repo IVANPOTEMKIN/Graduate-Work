@@ -38,26 +38,26 @@ import static ru.skypro.homework.utils.Examples.*;
 class CommentServiceImplTest {
 
     @Mock
-    private CommentRepository repository;
+    private CommentRepository commentRepository;
     @Mock
     private AdService adService;
     @Mock
     private UserService userService;
     @Mock
-    private CommentMapper mapper;
+    private CommentMapper commentMapper;
     @InjectMocks
     private CommentServiceImpl commentService;
 
     @BeforeEach
     void setUp() {
-        commentService = new CommentServiceImpl(repository, adService, userService, mapper);
+        commentService = new CommentServiceImpl(commentRepository, adService, userService, commentMapper);
     }
 
     @Test
     void getAllCommentsOfAd_successful() {
         getAdById();
 
-        when(repository.findCommentEntitiesByAd(any(AdEntity.class)))
+        when(commentRepository.findCommentEntitiesByAd(any(AdEntity.class)))
                 .thenReturn(List.of(createCommentEntity()));
 
         mapToCommentDTO();
@@ -70,9 +70,9 @@ class CommentServiceImplTest {
 
         verify(adService, times(1))
                 .getById(anyInt());
-        verify(repository, times(1))
+        verify(commentRepository, times(1))
                 .findCommentEntitiesByAd(any(AdEntity.class));
-        verify(mapper, times(1))
+        verify(commentMapper, times(1))
                 .toCommentDTO(any(CommentEntity.class));
     }
 
@@ -85,9 +85,9 @@ class CommentServiceImplTest {
 
         verify(adService, times(1))
                 .getById(anyInt());
-        verify(repository, times(0))
+        verify(commentRepository, times(0))
                 .findCommentEntitiesByAd(any(AdEntity.class));
-        verify(mapper, times(0))
+        verify(commentMapper, times(0))
                 .toCommentDTO(any(CommentEntity.class));
     }
 
@@ -96,7 +96,7 @@ class CommentServiceImplTest {
         getUser();
         getAdById();
 
-        when(mapper.toCommentEntity(any(CreateOrUpdateCommentDTO.class)))
+        when(commentMapper.toCommentEntity(any(CreateOrUpdateCommentDTO.class)))
                 .thenReturn(createCommentEntity());
 
         mapToCommentDTO();
@@ -111,11 +111,11 @@ class CommentServiceImplTest {
                 .getUser();
         verify(adService, times(1))
                 .getById(anyInt());
-        verify(mapper, times(1))
+        verify(commentMapper, times(1))
                 .toCommentEntity(any(CreateOrUpdateCommentDTO.class));
-        verify(repository, times(1))
+        verify(commentRepository, times(1))
                 .save(any(CommentEntity.class));
-        verify((mapper), times(1))
+        verify((commentMapper), times(1))
                 .toCommentDTO(any(CommentEntity.class));
     }
 
@@ -131,11 +131,11 @@ class CommentServiceImplTest {
                 .getUser();
         verify(adService, times(0))
                 .getById(anyInt());
-        verify(mapper, times(0))
+        verify(commentMapper, times(0))
                 .toCommentEntity(any(CreateOrUpdateCommentDTO.class));
-        verify(repository, times(0))
+        verify(commentRepository, times(0))
                 .save(any(CommentEntity.class));
-        verify((mapper), times(0))
+        verify((commentMapper), times(0))
                 .toCommentDTO(any(CommentEntity.class));
     }
 
@@ -151,11 +151,11 @@ class CommentServiceImplTest {
                 .getUser();
         verify(adService, times(1))
                 .getById(anyInt());
-        verify(mapper, times(0))
+        verify(commentMapper, times(0))
                 .toCommentEntity(any(CreateOrUpdateCommentDTO.class));
-        verify(repository, times(0))
+        verify(commentRepository, times(0))
                 .save(any(CommentEntity.class));
-        verify((mapper), times(0))
+        verify((commentMapper), times(0))
                 .toCommentDTO(any(CommentEntity.class));
     }
 
@@ -165,9 +165,9 @@ class CommentServiceImplTest {
 
         assertTrue(commentService.deleteComment(anyInt(), anyInt()));
 
-        verify(repository, times(1))
+        verify(commentRepository, times(1))
                 .findCommentEntityByIdAndAd_Id(anyInt(), anyInt());
-        verify(repository, times(1))
+        verify(commentRepository, times(1))
                 .delete(any(CommentEntity.class));
     }
 
@@ -176,9 +176,9 @@ class CommentServiceImplTest {
         assertThrows(CommentNotFoundException.class,
                 () -> commentService.deleteComment(anyInt(), anyInt()));
 
-        verify(repository, times(1))
+        verify(commentRepository, times(1))
                 .findCommentEntityByIdAndAd_Id(anyInt(), anyInt());
-        verify(repository, times(0))
+        verify(commentRepository, times(0))
                 .delete(any(CommentEntity.class));
     }
 
@@ -193,11 +193,11 @@ class CommentServiceImplTest {
         assertNotNull(actual);
         assertEquals(expected, actual);
 
-        verify(repository, times(1))
+        verify(commentRepository, times(1))
                 .findCommentEntityByIdAndAd_Id(anyInt(), anyInt());
-        verify(repository, times(1))
+        verify(commentRepository, times(1))
                 .save(any(CommentEntity.class));
-        verify(mapper, times(1))
+        verify(commentMapper, times(1))
                 .toCommentDTO(any(CommentEntity.class));
     }
 
@@ -206,16 +206,16 @@ class CommentServiceImplTest {
         assertThrows(CommentNotFoundException.class,
                 () -> commentService.updateComment(ID, ID, createCreateOrUpdateCommentDTO()));
 
-        verify(repository, times(1))
+        verify(commentRepository, times(1))
                 .findCommentEntityByIdAndAd_Id(anyInt(), anyInt());
-        verify(repository, times(0))
+        verify(commentRepository, times(0))
                 .save(any(CommentEntity.class));
-        verify(mapper, times(0))
+        verify(commentMapper, times(0))
                 .toCommentDTO(any(CommentEntity.class));
     }
 
     private void getCommentById() {
-        when(repository.findCommentEntityByIdAndAd_Id(anyInt(), anyInt()))
+        when(commentRepository.findCommentEntityByIdAndAd_Id(anyInt(), anyInt()))
                 .thenReturn(Optional.of(createCommentEntity()));
     }
 
@@ -235,7 +235,7 @@ class CommentServiceImplTest {
     }
 
     private void mapToCommentDTO() {
-        when(mapper.toCommentDTO(any(CommentEntity.class)))
+        when(commentMapper.toCommentDTO(any(CommentEntity.class)))
                 .thenReturn(createCommentDTO());
     }
 }

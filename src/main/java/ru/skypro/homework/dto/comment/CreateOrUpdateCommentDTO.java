@@ -1,7 +1,9 @@
 package ru.skypro.homework.dto.comment;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Size;
 
@@ -9,6 +11,8 @@ import javax.validation.constraints.Size;
  * <code> <b> text </b> </code> <i> Текст комментария </i> <br>
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateOrUpdateCommentDTO {
 
     @Schema(description = "Текст комментария")

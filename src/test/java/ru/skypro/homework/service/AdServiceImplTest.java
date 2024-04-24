@@ -42,24 +42,24 @@ import static ru.skypro.homework.utils.Examples.*;
 class AdServiceImplTest {
 
     @Mock
-    private AdRepository repository;
+    private AdRepository adRepository;
     @Mock
     private UserService userService;
     @Mock
     private ImageService imageService;
     @Mock
-    private AdMapper mapper;
+    private AdMapper adMapper;
     @InjectMocks
     private AdServiceImpl adService;
 
     @BeforeEach
     void setUp() {
-        adService = new AdServiceImpl(repository, userService, imageService, mapper);
+        adService = new AdServiceImpl(adRepository, userService, imageService, adMapper);
     }
 
     @Test
     void getAllAds() {
-        when(repository.findAll())
+        when(adRepository.findAll())
                 .thenReturn(List.of(createAdEntity()));
 
         mapToAdDTO();
@@ -70,9 +70,9 @@ class AdServiceImplTest {
         assertNotNull(actual);
         assertEquals(expected, actual);
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findAll();
-        verify(mapper, times(1))
+        verify(adMapper, times(1))
                 .toAdDTO(any(AdEntity.class));
     }
 
@@ -89,15 +89,15 @@ class AdServiceImplTest {
         assertNotNull(actual);
         assertEquals(expected, actual);
 
-        verify(mapper, times(1))
+        verify(adMapper, times(1))
                 .toAdEntity(any(CreateOrUpdateAdDTO.class));
         verify(userService, times(1))
                 .getUser();
         verify(imageService, times(1))
                 .saveImage(any(MultipartFile.class));
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .save(any(AdEntity.class));
-        verify(mapper, times(1))
+        verify(adMapper, times(1))
                 .toAdDTO(any(AdEntity.class));
     }
 
@@ -109,15 +109,15 @@ class AdServiceImplTest {
         assertThrows(UserNotFoundException.class,
                 () -> adService.addAd(createCreateOrUpdateAdDTO(), createFilePNG()));
 
-        verify(mapper, times(1))
+        verify(adMapper, times(1))
                 .toAdEntity(any(CreateOrUpdateAdDTO.class));
         verify(userService, times(1))
                 .getUser();
         verify(imageService, times(0))
                 .saveImage(any(MultipartFile.class));
-        verify(repository, times(0))
+        verify(adRepository, times(0))
                 .save(any(AdEntity.class));
-        verify(mapper, times(0))
+        verify(adMapper, times(0))
                 .toAdDTO(any(AdEntity.class));
     }
 
@@ -130,15 +130,15 @@ class AdServiceImplTest {
         assertThrows(FailedSaveFileException.class,
                 () -> adService.addAd(createCreateOrUpdateAdDTO(), createFilePNG()));
 
-        verify(mapper, times(1))
+        verify(adMapper, times(1))
                 .toAdEntity(any(CreateOrUpdateAdDTO.class));
         verify(userService, times(1))
                 .getUser();
         verify(imageService, times(1))
                 .saveImage(any(MultipartFile.class));
-        verify(repository, times(0))
+        verify(adRepository, times(0))
                 .save(any(AdEntity.class));
-        verify(mapper, times(0))
+        verify(adMapper, times(0))
                 .toAdDTO(any(AdEntity.class));
     }
 
@@ -151,15 +151,15 @@ class AdServiceImplTest {
         assertThrows(FailedRecordFileException.class,
                 () -> adService.addAd(createCreateOrUpdateAdDTO(), createFilePNG()));
 
-        verify(mapper, times(1))
+        verify(adMapper, times(1))
                 .toAdEntity(any(CreateOrUpdateAdDTO.class));
         verify(userService, times(1))
                 .getUser();
         verify(imageService, times(1))
                 .saveImage(any(MultipartFile.class));
-        verify(repository, times(0))
+        verify(adRepository, times(0))
                 .save(any(AdEntity.class));
-        verify(mapper, times(0))
+        verify(adMapper, times(0))
                 .toAdDTO(any(AdEntity.class));
     }
 
@@ -167,7 +167,7 @@ class AdServiceImplTest {
     void getInfoAboutAd_successful() {
         getAdById();
 
-        when(mapper.toExtendedAdDTO(any(AdEntity.class)))
+        when(adMapper.toExtendedAdDTO(any(AdEntity.class)))
                 .thenReturn(createExtendedAdDTO());
 
         ExtendedAdDTO expected = createExtendedAdDTO();
@@ -176,9 +176,9 @@ class AdServiceImplTest {
         assertNotNull(actual);
         assertEquals(expected, actual);
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
-        verify(mapper, times(1))
+        verify(adMapper, times(1))
                 .toExtendedAdDTO(any(AdEntity.class));
 
     }
@@ -188,9 +188,9 @@ class AdServiceImplTest {
         assertThrows(AdNotFoundException.class,
                 () -> adService.getInfoAboutAd(anyInt()));
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
-        verify(mapper, times(0))
+        verify(adMapper, times(0))
                 .toExtendedAdDTO(any(AdEntity.class));
     }
 
@@ -203,9 +203,9 @@ class AdServiceImplTest {
 
         assertTrue(adService.deleteAd(anyInt()));
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .delete(any(AdEntity.class));
         verify(imageService, times(1))
                 .deleteImage(anyInt());
@@ -216,9 +216,9 @@ class AdServiceImplTest {
         assertThrows(AdNotFoundException.class,
                 () -> adService.deleteAd(anyInt()));
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
-        verify(repository, times(0))
+        verify(adRepository, times(0))
                 .delete(any(AdEntity.class));
         verify(imageService, times(0))
                 .deleteImage(anyInt());
@@ -234,9 +234,9 @@ class AdServiceImplTest {
         assertThrows(ImageNotFoundException.class,
                 () -> adService.deleteAd(anyInt()));
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .delete(any(AdEntity.class));
         verify(imageService, times(1))
                 .deleteImage(anyInt());
@@ -252,9 +252,9 @@ class AdServiceImplTest {
         assertThrows(FilePathNotFoundException.class,
                 () -> adService.deleteAd(anyInt()));
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .delete(any(AdEntity.class));
         verify(imageService, times(1))
                 .deleteImage(anyInt());
@@ -271,11 +271,11 @@ class AdServiceImplTest {
         assertNotNull(actual);
         assertEquals(expected, actual);
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .save(any(AdEntity.class));
-        verify(mapper, times(1))
+        verify(adMapper, times(1))
                 .toAdDTO(any(AdEntity.class));
     }
 
@@ -284,11 +284,11 @@ class AdServiceImplTest {
         assertThrows(AdNotFoundException.class,
                 () -> adService.updateInfoAboutAd(anyInt(), createCreateOrUpdateAdDTO()));
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
-        verify(repository, times(0))
+        verify(adRepository, times(0))
                 .save(any(AdEntity.class));
-        verify(mapper, times(0))
+        verify(adMapper, times(0))
                 .toAdDTO(any(AdEntity.class));
     }
 
@@ -296,7 +296,7 @@ class AdServiceImplTest {
     void getAllAdsOfUser_successful() {
         getUser();
 
-        when(repository.findAdEntitiesByAuthor(any(UserEntity.class)))
+        when(adRepository.findAdEntitiesByAuthor(any(UserEntity.class)))
                 .thenReturn(List.of(createAdEntity()));
 
         mapToAdDTO();
@@ -309,9 +309,9 @@ class AdServiceImplTest {
 
         verify(userService, times(1))
                 .getUser();
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findAdEntitiesByAuthor(any(UserEntity.class));
-        verify(mapper, times(1))
+        verify(adMapper, times(1))
                 .toAdDTO(any(AdEntity.class));
     }
 
@@ -324,9 +324,9 @@ class AdServiceImplTest {
 
         verify(userService, times(1))
                 .getUser();
-        verify(repository, times(0))
+        verify(adRepository, times(0))
                 .findAdEntitiesByAuthor(any(UserEntity.class));
-        verify(mapper, times(0))
+        verify(adMapper, times(0))
                 .toAdDTO(any(AdEntity.class));
     }
 
@@ -340,11 +340,11 @@ class AdServiceImplTest {
         assertNotNull(actual);
         assertEquals(PATH, actual);
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
         verify(imageService, times(1))
                 .saveImage(any(MultipartFile.class));
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .save(any(AdEntity.class));
     }
 
@@ -353,11 +353,11 @@ class AdServiceImplTest {
         assertThrows(AdNotFoundException.class,
                 () -> adService.updateImageOfAd(anyInt(), createFilePNG()));
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
         verify(imageService, times(0))
                 .saveImage(any(MultipartFile.class));
-        verify(repository, times(0))
+        verify(adRepository, times(0))
                 .save(any(AdEntity.class));
     }
 
@@ -369,11 +369,11 @@ class AdServiceImplTest {
         assertThrows(FailedSaveFileException.class,
                 () -> adService.updateImageOfAd(anyInt(), createFilePNG()));
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
         verify(imageService, times(1))
                 .saveImage(any(MultipartFile.class));
-        verify(repository, times(0))
+        verify(adRepository, times(0))
                 .save(any(AdEntity.class));
     }
 
@@ -385,11 +385,11 @@ class AdServiceImplTest {
         assertThrows(FailedRecordFileException.class,
                 () -> adService.updateImageOfAd(anyInt(), createFilePNG()));
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
         verify(imageService, times(1))
                 .saveImage(any(MultipartFile.class));
-        verify(repository, times(0))
+        verify(adRepository, times(0))
                 .save(any(AdEntity.class));
     }
 
@@ -403,7 +403,7 @@ class AdServiceImplTest {
         assertNotNull(actual);
         assertEquals(expected, actual);
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
     }
 
@@ -412,12 +412,12 @@ class AdServiceImplTest {
         assertThrows(AdNotFoundException.class,
                 () -> adService.getById(anyInt()));
 
-        verify(repository, times(1))
+        verify(adRepository, times(1))
                 .findById(anyInt());
     }
 
     private void getAdById() {
-        when(repository.findById(anyInt()))
+        when(adRepository.findById(anyInt()))
                 .thenReturn(Optional.of(createAdEntity()));
     }
 
@@ -447,12 +447,12 @@ class AdServiceImplTest {
     }
 
     private void mapToAdDTO() {
-        when(mapper.toAdDTO(any(AdEntity.class)))
+        when(adMapper.toAdDTO(any(AdEntity.class)))
                 .thenReturn(createAdDTO());
     }
 
     private void mapToAdEntity() {
-        when(mapper.toAdEntity(any(CreateOrUpdateAdDTO.class)))
+        when(adMapper.toAdEntity(any(CreateOrUpdateAdDTO.class)))
                 .thenReturn(createAdEntity());
     }
 }

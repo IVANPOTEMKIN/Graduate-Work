@@ -1,7 +1,9 @@
 package ru.skypro.homework.dto.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Size;
 
@@ -10,6 +12,8 @@ import javax.validation.constraints.Size;
  * <code> <b> newPassword </b> </code> <i> Новый пароль </i> <br>
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class NewPasswordDTO {
 
     @Schema(description = "Текущий пароль")

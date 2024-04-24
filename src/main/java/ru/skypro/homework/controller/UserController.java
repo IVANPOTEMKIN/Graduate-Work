@@ -24,7 +24,7 @@ import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 @CrossOrigin(value = "http://localhost:3000")
 public class UserController {
 
-    private final UserService service;
+    private final UserService userService;
 
     @Operation(
             tags = TAG_USERS,
@@ -33,6 +33,11 @@ public class UserController {
                     @ApiResponse(
                             responseCode = CODE_200,
                             description = DESCRIPTION_CODE_200,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_400,
+                            description = DESCRIPTION_CODE_400,
                             content = @Content()
                     ),
                     @ApiResponse(
@@ -60,7 +65,7 @@ public class UserController {
 
     @PostMapping("/set_password")
     public ResponseEntity<?> updatePassword(@RequestBody NewPasswordDTO dto) {
-        service.updatePassword(dto);
+        userService.updatePassword(dto);
         return ResponseEntity.ok().build();
     }
 
@@ -96,7 +101,7 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getInfoAboutUser() {
-        return ResponseEntity.ok(service.getInfoAboutUser());
+        return ResponseEntity.ok(userService.getInfoAboutUser());
     }
 
     @Operation(
@@ -120,7 +125,11 @@ public class UserController {
                             responseCode = CODE_401,
                             description = DESCRIPTION_CODE_401,
                             content = @Content()
-                    ),
+                    ), @ApiResponse(
+                    responseCode = CODE_403,
+                    description = DESCRIPTION_CODE_403,
+                    content = @Content()
+            ),
                     @ApiResponse(
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
@@ -136,7 +145,7 @@ public class UserController {
 
     @PatchMapping("/me")
     public ResponseEntity<UpdateUserDTO> updateInfoAboutUser(@RequestBody UpdateUserDTO dto) {
-        return ResponseEntity.ok(service.updateInfoAboutUser(dto));
+        return ResponseEntity.ok(userService.updateInfoAboutUser(dto));
     }
 
     @Operation(
@@ -151,6 +160,11 @@ public class UserController {
                     @ApiResponse(
                             responseCode = CODE_401,
                             description = DESCRIPTION_CODE_401,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
+                            responseCode = CODE_403,
+                            description = DESCRIPTION_CODE_403,
                             content = @Content()
                     ),
                     @ApiResponse(
@@ -175,7 +189,7 @@ public class UserController {
     public ResponseEntity<?> updateAvatarOfUser(@RequestParam(name = "image")
                                                 MultipartFile file) {
 
-        service.updateAvatarOfUser(file);
+        userService.updateAvatarOfUser(file);
         return ResponseEntity.ok().build();
     }
 }

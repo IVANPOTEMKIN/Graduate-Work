@@ -23,40 +23,40 @@ import static ru.skypro.homework.utils.Examples.createUserEntity;
 class UserDetailsServiceImplTest {
 
     @Mock
-    private UserRepository repository;
+    private UserRepository userRepository;
 
     @InjectMocks
-    private UserDetailsServiceImpl service;
+    private UserDetailsServiceImpl detailsService;
 
     @BeforeEach
     public void setUp() {
-        service = new UserDetailsServiceImpl(repository);
+        detailsService = new UserDetailsServiceImpl(userRepository);
     }
 
     @Test
     void loadUserByUsername_successful() {
-        when(repository.findUserEntityByUsername(anyString()))
+        when(userRepository.findUserEntityByUsername(anyString()))
                 .thenReturn(Optional.of(createUserEntity()));
 
         UserDetails expected = createUserDetails();
-        UserDetails actual = service.loadUserByUsername(anyString());
+        UserDetails actual = detailsService.loadUserByUsername(anyString());
 
         assertNotNull(actual);
         assertEquals(expected, actual);
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
     }
 
     @Test
     void loadUserByUsername_UserNotFoundException() {
-        when(repository.findUserEntityByUsername(anyString()))
+        when(userRepository.findUserEntityByUsername(anyString()))
                 .thenThrow(UserNotFoundException.class);
 
         assertThrows(UserNotFoundException.class,
-                () -> service.loadUserByUsername(anyString()));
+                () -> detailsService.loadUserByUsername(anyString()));
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
     }
 }

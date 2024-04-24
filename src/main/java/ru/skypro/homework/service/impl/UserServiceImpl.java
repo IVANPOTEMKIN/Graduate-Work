@@ -29,23 +29,23 @@ import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder encoder;
-    private final UserRepository repository;
+    private final UserRepository userRepository;
     private final ImageService imageService;
-    private final UserMapper mapper;
+    private final UserMapper userMapper;
 
     @Override
     public boolean updatePassword(NewPasswordDTO dto) {
         UserEntity user = getUser();
         String password = checkPasswords(dto, user);
         user.setPassword(encoder.encode(password));
-        repository.save(user);
+        userRepository.save(user);
         return true;
     }
 
     @Override
     public UserDTO getInfoAboutUser() {
         UserEntity user = getUser();
-        return mapper.toUserDTO(user);
+        return userMapper.toUserDTO(user);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class UserServiceImpl implements UserService {
         user.setLastName(dto.getLastName());
         user.setPhoneNumber(dto.getPhone());
 
-        repository.save(user);
-        return mapper.toUpdateUserDTO(user);
+        userRepository.save(user);
+        return userMapper.toUpdateUserDTO(user);
     }
 
     @Override
@@ -65,13 +65,13 @@ public class UserServiceImpl implements UserService {
         UserEntity user = getUser();
         ImageEntity avatar = imageService.saveImage(file);
         user.setAvatar(avatar);
-        repository.save(user);
+        userRepository.save(user);
         return true;
     }
 
     @Override
     public UserEntity getUser() {
-        return repository.findUserEntityByUsername(getCurrentUsername())
+        return userRepository.findUserEntityByUsername(getCurrentUsername())
                 .orElseThrow(UserNotFoundException::new);
     }
 

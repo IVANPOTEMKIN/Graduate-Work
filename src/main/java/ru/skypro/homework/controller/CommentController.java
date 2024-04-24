@@ -22,7 +22,7 @@ import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 @CrossOrigin(value = "http://localhost:3000")
 public class CommentController {
 
-    private final CommentService service;
+    private final CommentService commentService;
 
     @Operation(
             tags = TAG_COMMENTS,
@@ -56,7 +56,7 @@ public class CommentController {
 
     @GetMapping("/{id}/comments")
     public ResponseEntity<CommentsDTO> getAllCommentsOfAd(@PathVariable int id) {
-        return ResponseEntity.ok(service.getAllCommentsOfAd(id));
+        return ResponseEntity.ok(commentService.getAllCommentsOfAd(id));
     }
 
     @Operation(
@@ -98,7 +98,7 @@ public class CommentController {
     public ResponseEntity<CommentDTO> addCommentToAd(@PathVariable int id,
                                                      @RequestBody CreateOrUpdateCommentDTO dto) {
 
-        return ResponseEntity.ok(service.addCommentToAd(id, dto));
+        return ResponseEntity.ok(commentService.addCommentToAd(id, dto));
     }
 
     @Operation(
@@ -137,7 +137,7 @@ public class CommentController {
     public ResponseEntity<?> deleteComment(@PathVariable int adid,
                                            @PathVariable int commentid) {
 
-        service.deleteComment(adid, commentid);
+        commentService.deleteComment(adid, commentid);
         return ResponseEntity.ok().build();
     }
 
@@ -186,6 +186,6 @@ public class CommentController {
                                                     @PathVariable int commentid,
                                                     @RequestBody CreateOrUpdateCommentDTO dto) {
 
-        return ResponseEntity.ok(service.updateComment(adid, commentid, dto));
+        return ResponseEntity.ok(commentService.updateComment(adid, commentid, dto));
     }
 }

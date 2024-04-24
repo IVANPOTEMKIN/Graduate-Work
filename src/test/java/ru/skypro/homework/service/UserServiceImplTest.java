@@ -40,17 +40,17 @@ class UserServiceImplTest {
     @Mock
     private PasswordEncoder encoder;
     @Mock
-    private UserRepository repository;
+    private UserRepository userRepository;
     @Mock
     private ImageService imageService;
     @Mock
-    private UserMapper mapper;
+    private UserMapper userMapper;
     @InjectMocks
     private UserServiceImpl userService;
 
     @BeforeEach
     void setUp() {
-        userService = new UserServiceImpl(encoder, repository, imageService, mapper);
+        userService = new UserServiceImpl(encoder, userRepository, imageService, userMapper);
     }
 
     @Test
@@ -67,7 +67,7 @@ class UserServiceImplTest {
 
         assertTrue(userService.updatePassword(dto));
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
         verify(encoder, times(1))
                 .matches(dto.getCurrentPassword(), user.getPassword());
@@ -75,7 +75,7 @@ class UserServiceImplTest {
                 .matches(dto.getNewPassword(), user.getPassword());
         verify(encoder, times(1))
                 .encode(anyString());
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .save(any(UserEntity.class));
     }
 
@@ -84,13 +84,13 @@ class UserServiceImplTest {
         assertThrows(UserNotFoundException.class,
                 () -> userService.updatePassword(createNewPasswordDTO()));
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
         verify(encoder, times(0))
                 .matches(anyString(), anyString());
         verify(encoder, times(0))
                 .encode(anyString());
-        verify(repository, times(0))
+        verify(userRepository, times(0))
                 .save(any(UserEntity.class));
     }
 
@@ -107,7 +107,7 @@ class UserServiceImplTest {
         assertThrows(WrongPasswordException.class,
                 () -> userService.updatePassword(dto));
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
         verify(encoder, times(1))
                 .matches(dto.getCurrentPassword(), user.getPassword());
@@ -115,7 +115,7 @@ class UserServiceImplTest {
                 .matches(dto.getNewPassword(), user.getPassword());
         verify(encoder, times(0))
                 .encode(anyString());
-        verify(repository, times(0))
+        verify(userRepository, times(0))
                 .save(any(UserEntity.class));
     }
 
@@ -134,7 +134,7 @@ class UserServiceImplTest {
         assertThrows(ReusePasswordException.class,
                 () -> userService.updatePassword(dto));
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
         verify(encoder, times(1))
                 .matches(dto.getCurrentPassword(), user.getPassword());
@@ -142,7 +142,7 @@ class UserServiceImplTest {
                 .matches(dto.getNewPassword(), user.getPassword());
         verify(encoder, times(0))
                 .encode(anyString());
-        verify(repository, times(0))
+        verify(userRepository, times(0))
                 .save(any(UserEntity.class));
     }
 
@@ -150,7 +150,7 @@ class UserServiceImplTest {
     void getInfoAboutUser_successful() {
         getUserByUsername();
 
-        when(mapper.toUserDTO(any(UserEntity.class)))
+        when(userMapper.toUserDTO(any(UserEntity.class)))
                 .thenReturn(createUserDTO());
 
         UserDTO expected = createUserDTO();
@@ -159,9 +159,9 @@ class UserServiceImplTest {
         assertNotNull(actual);
         assertEquals(expected, actual);
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
-        verify(mapper, times(1))
+        verify(userMapper, times(1))
                 .toUserDTO(any(UserEntity.class));
     }
 
@@ -170,9 +170,9 @@ class UserServiceImplTest {
         assertThrows(UserNotFoundException.class,
                 () -> userService.getInfoAboutUser());
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
-        verify(mapper, times(0))
+        verify(userMapper, times(0))
                 .toUserDTO(any(UserEntity.class));
     }
 
@@ -180,7 +180,7 @@ class UserServiceImplTest {
     void updateInfoAboutUser_successful() {
         getUserByUsername();
 
-        when(mapper.toUpdateUserDTO(any(UserEntity.class)))
+        when(userMapper.toUpdateUserDTO(any(UserEntity.class)))
                 .thenReturn(createUpdateUserDTO());
 
         UpdateUserDTO expected = createUpdateUserDTO();
@@ -189,11 +189,11 @@ class UserServiceImplTest {
         assertNotNull(actual);
         assertEquals(expected, actual);
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .save(any(UserEntity.class));
-        verify(mapper, times(1))
+        verify(userMapper, times(1))
                 .toUpdateUserDTO(any(UserEntity.class));
     }
 
@@ -202,11 +202,11 @@ class UserServiceImplTest {
         assertThrows(UserNotFoundException.class,
                 () -> userService.updateInfoAboutUser(createUpdateUserDTO()));
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
-        verify(repository, times(0))
+        verify(userRepository, times(0))
                 .save(any(UserEntity.class));
-        verify(mapper, times(0))
+        verify(userMapper, times(0))
                 .toUpdateUserDTO(any(UserEntity.class));
     }
 
@@ -221,11 +221,11 @@ class UserServiceImplTest {
 
         assertTrue(userService.updateAvatarOfUser(file));
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
         verify(imageService, times(1))
                 .saveImage(any(MultipartFile.class));
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .save(any(UserEntity.class));
     }
 
@@ -234,11 +234,11 @@ class UserServiceImplTest {
         assertThrows(UserNotFoundException.class,
                 () -> userService.updateAvatarOfUser(createFilePNG()));
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
         verify(imageService, times(0))
                 .saveImage(any(MultipartFile.class));
-        verify(repository, times(0))
+        verify(userRepository, times(0))
                 .save(any(UserEntity.class));
     }
 
@@ -254,11 +254,11 @@ class UserServiceImplTest {
         assertThrows(FailedSaveFileException.class,
                 () -> userService.updateAvatarOfUser(file));
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
         verify(imageService, times(1))
                 .saveImage(any(MultipartFile.class));
-        verify(repository, times(0))
+        verify(userRepository, times(0))
                 .save(any(UserEntity.class));
     }
 
@@ -274,11 +274,11 @@ class UserServiceImplTest {
         assertThrows(FailedRecordFileException.class,
                 () -> userService.updateAvatarOfUser(file));
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
         verify(imageService, times(1))
                 .saveImage(any(MultipartFile.class));
-        verify(repository, times(0))
+        verify(userRepository, times(0))
                 .save(any(UserEntity.class));
     }
 
@@ -292,7 +292,7 @@ class UserServiceImplTest {
         assertNotNull(actual);
         assertEquals(expected, actual);
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
     }
 
@@ -301,12 +301,12 @@ class UserServiceImplTest {
         assertThrows(UserNotFoundException.class,
                 () -> userService.getUser());
 
-        verify(repository, times(1))
+        verify(userRepository, times(1))
                 .findUserEntityByUsername(anyString());
     }
 
     private void getUserByUsername() {
-        when(repository.findUserEntityByUsername(anyString()))
+        when(userRepository.findUserEntityByUsername(anyString()))
                 .thenReturn(Optional.of(createUserEntity()));
     }
 }

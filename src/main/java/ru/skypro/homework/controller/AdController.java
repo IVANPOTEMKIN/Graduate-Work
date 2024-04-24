@@ -27,7 +27,7 @@ import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 @CrossOrigin(value = "http://localhost:3000")
 public class AdController {
 
-    private final AdService service;
+    private final AdService adService;
 
     @Operation(
             tags = TAG_ADS,
@@ -51,7 +51,7 @@ public class AdController {
 
     @GetMapping
     public ResponseEntity<AdsDTO> getAllAds() {
-        return ResponseEntity.ok(service.getAllAds());
+        return ResponseEntity.ok(adService.getAllAds());
     }
 
     @Operation(
@@ -100,7 +100,7 @@ public class AdController {
                                        @RequestPart(name = "image")
                                        MultipartFile file) {
 
-        return ResponseEntity.status(CREATED).body(service.addAd(dto, file));
+        return ResponseEntity.status(CREATED).body(adService.addAd(dto, file));
     }
 
     @Operation(
@@ -135,7 +135,7 @@ public class AdController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ExtendedAdDTO> getInfoAboutAd(@PathVariable int id) {
-        return ResponseEntity.ok(service.getInfoAboutAd(id));
+        return ResponseEntity.ok(adService.getInfoAboutAd(id));
     }
 
     @Operation(
@@ -177,7 +177,7 @@ public class AdController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAd(@PathVariable int id) {
-        service.deleteAd(id);
+        adService.deleteAd(id);
         return ResponseEntity.status(NO_CONTENT).build();
     }
 
@@ -225,7 +225,7 @@ public class AdController {
     public ResponseEntity<AdDTO> updateInfoAboutAd(@PathVariable int id,
                                                    @RequestBody CreateOrUpdateAdDTO dto) {
 
-        return ResponseEntity.ok(service.updateInfoAboutAd(id, dto));
+        return ResponseEntity.ok(adService.updateInfoAboutAd(id, dto));
     }
 
     @Operation(
@@ -260,7 +260,7 @@ public class AdController {
 
     @GetMapping("/me")
     public ResponseEntity<AdsDTO> getAllAdsOfUser() {
-        return ResponseEntity.ok(service.getAllAdsOfUser());
+        return ResponseEntity.ok(adService.getAllAdsOfUser());
     }
 
     @Operation(
@@ -310,6 +310,6 @@ public class AdController {
                                                   @RequestPart(name = "image")
                                                   MultipartFile file) {
 
-        return ResponseEntity.ok(service.updateImageOfAd(id, file));
+        return ResponseEntity.ok(adService.updateImageOfAd(id, file));
     }
 }

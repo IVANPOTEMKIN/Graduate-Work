@@ -24,8 +24,8 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
-    private final ImageRepository repository;
-    private final ImageMapper mapper;
+    private final ImageRepository imageRepository;
+    private final ImageMapper imageMapper;
 
     @Value("${images.folder}")
     private String directory;
@@ -66,7 +66,7 @@ public class ImageServiceImpl implements ImageService {
             throw new FilePathNotFoundException();
         }
 
-        repository.delete(image);
+        imageRepository.delete(image);
         return true;
     }
 
@@ -78,9 +78,9 @@ public class ImageServiceImpl implements ImageService {
      * @return {@link ImageEntity}
      */
     private ImageEntity saveToDB(MultipartFile file, Path path) {
-        ImageEntity image = mapper.toImageEntity(file);
+        ImageEntity image = imageMapper.toImageEntity(file);
         image.setPath(path.toString());
-        return repository.save(image);
+        return imageRepository.save(image);
     }
 
     /**
@@ -90,7 +90,7 @@ public class ImageServiceImpl implements ImageService {
      * @return {@link ImageEntity}
      */
     private ImageEntity getImage(int id) {
-        return repository.findById(id)
+        return imageRepository.findById(id)
                 .orElseThrow(ImageNotFoundException::new);
     }
 

@@ -1,7 +1,9 @@
 package ru.skypro.homework.dto.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.skypro.homework.dto.Role;
 
 /**
@@ -14,6 +16,8 @@ import ru.skypro.homework.dto.Role;
  * <code> <b> image </b> </code> <i> Ссылка на аватар пользователя </i> <br
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO {
 
     @Schema(description = "ID пользователя")

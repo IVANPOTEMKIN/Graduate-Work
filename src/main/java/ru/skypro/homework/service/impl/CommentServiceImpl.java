@@ -30,18 +30,18 @@ import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 @Transactional(isolation = SERIALIZABLE)
 public class CommentServiceImpl implements CommentService {
 
-    private final CommentRepository repository;
+    private final CommentRepository commentRepository;
     private final AdService adService;
     private final UserService userService;
-    private final CommentMapper mapper;
+    private final CommentMapper commentMapper;
 
     @Override
     public CommentsDTO getAllCommentsOfAd(int id) {
         AdEntity ad = adService.getById(id);
 
-        List<CommentDTO> list = repository.findCommentEntitiesByAd(ad)
+        List<CommentDTO> list = commentRepository.findCommentEntitiesByAd(ad)
                 .stream()
-                .map(mapper::toCommentDTO)
+                .map(commentMapper::toCommentDTO)
                 .collect(Collectors.toList());
 
         return new CommentsDTO(list.size(), list);
@@ -51,14 +51,14 @@ public class CommentServiceImpl implements CommentService {
     public CommentDTO addCommentToAd(int id, CreateOrUpdateCommentDTO dto) {
         UserEntity user = userService.getUser();
         AdEntity ad = adService.getById(id);
-        CommentEntity comment = mapper.toCommentEntity(dto);
+        CommentEntity comment = commentMapper.toCommentEntity(dto);
 
         comment.setCreatedAt(now());
         comment.setAd(ad);
         comment.setAuthor(user);
 
-        repository.save(comment);
-        return mapper.toCommentDTO(comment);
+        commentRepository.save(comment);
+        return commentMapper.toCommentDTO(comment);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class CommentServiceImpl implements CommentService {
             "or @adServiceImpl.isAuthor(authentication.getName, #idAd)" +
             "or @commentServiceImpl.isAuthor(authentication.getName, #idComment)")
     public boolean deleteComment(int idAd, int idComment) {
-        repository.delete(getById(idComment, idAd));
+        commentRepository.delete(getById(idComment, idAd));
         return true;
     }
 
@@ -78,8 +78,8 @@ public class CommentServiceImpl implements CommentService {
         CommentEntity comment = getById(idComment, idAd);
         comment.setText(dto.getText());
         comment.setCreatedAt(now());
-        repository.save(comment);
-        return mapper.toCommentDTO(comment);
+        commentRepository.save(comment);
+        return commentMapper.toCommentDTO(comment);
     }
 
     /**
@@ -90,7 +90,7 @@ public class CommentServiceImpl implements CommentService {
      * @return {@link Boolean} <i> Результат выполнения метода </i>
      */
     public boolean isAuthor(String username, int id) {
-        CommentEntity comment = repository.findById(id)
+        CommentEntity comment = commentRepository.findById(id)
                 .orElseThrow(CommentNotFoundException::new);
         return comment.getAuthor().getUsername().equals(username);
     }
@@ -103,7 +103,7 @@ public class CommentServiceImpl implements CommentService {
      * @return {@link CommentEntity}
      */
     private CommentEntity getById(int idComment, int idAd) {
-        return repository.findCommentEntityByIdAndAd_Id(idComment, idAd)
+        return commentRepository.findCommentEntityByIdAndAd_Id(idComment, idAd)
                 .orElseThrow(CommentNotFoundException::new);
     }
 }
