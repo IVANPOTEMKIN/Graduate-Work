@@ -1,4 +1,4 @@
-package ru.skypro.homework.controller.WebMvcTest;
+package ru.skypro.homework.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.controller.AdController;
 import ru.skypro.homework.dto.ad.CreateOrUpdateAdDTO;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.ImageEntity;
@@ -90,6 +89,8 @@ class AdControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    // getAllAds
+
     @Test
     @WithMockUser(username = USERNAME, authorities = "ADMIN")
     void getAllAds_successful() throws Exception {
@@ -111,6 +112,8 @@ class AdControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
+    // addAd
+
     @Test
     void addAd_UnauthorizedException() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
@@ -126,6 +129,8 @@ class AdControllerTest {
                         .post("/ads"))
                 .andExpect(status().isForbidden());
     }
+
+    // getInfoAboutAd
 
     @Test
     @WithMockUser(username = USERNAME, authorities = "ADMIN")
@@ -159,6 +164,8 @@ class AdControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(new AdNotFoundException().getMessage()));
     }
+
+    // deleteAd
 
     @Test
     @WithMockUser(username = USERNAME, authorities = "ADMIN")
@@ -216,6 +223,8 @@ class AdControllerTest {
                 .andExpect(content().string(new ImageNotFoundException().getMessage()));
     }
 
+    // updateInfoAboutAd
+
     @Test
     @WithMockUser(username = USERNAME, authorities = "ADMIN")
     void updateInfoAboutAd_successful() throws Exception {
@@ -261,6 +270,8 @@ class AdControllerTest {
                 .andExpect(content().string(new AdNotFoundException().getMessage()));
     }
 
+    // getAllAdsOfUser
+
     @Test
     @WithMockUser(username = USERNAME, authorities = "ADMIN")
     void getAllAdsOfUser_successful() throws Exception {
@@ -292,6 +303,8 @@ class AdControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(new UserNotFoundException().getMessage()));
     }
+
+    // updateImageOfAd
 
     @Test
     @WithMockUser(username = USERNAME, authorities = "ADMIN")
@@ -370,6 +383,8 @@ class AdControllerTest {
                         }))
                 .andExpect(status().isExpectationFailed());
     }
+
+    // Utils
 
     private static Stream<Arguments> paramsFor_UpdateInfoAboutAd_test() {
         return Stream.of(

@@ -1,4 +1,4 @@
-package ru.skypro.homework.controller.WebMvcTest;
+package ru.skypro.homework.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.controller.ImageController;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.exception.ImageNotFoundException;
 import ru.skypro.homework.exception.file.FilePathNotFoundException;
@@ -78,6 +77,8 @@ class ImageControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    // getAvatar
+
     @Test
     void getAvatar_success() throws Exception {
         getImage(saveImage());
@@ -105,6 +106,8 @@ class ImageControllerTest {
                 .andExpect(content().string(new FilePathNotFoundException().getMessage()));
     }
 
+    // getImage
+
     @Test
     void getImage_success() throws Exception {
         getImage(saveImage());
@@ -131,6 +134,8 @@ class ImageControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(new FilePathNotFoundException().getMessage()));
     }
+
+    // Utils
 
     private void getImage(ImageEntity image) {
         when(imageRepository.findById(anyInt()))

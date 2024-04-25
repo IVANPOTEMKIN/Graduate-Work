@@ -53,6 +53,8 @@ class UserServiceImplTest {
         userService = new UserServiceImpl(encoder, userRepository, imageService, userMapper);
     }
 
+    // updatePassword
+
     @Test
     void updatePassword_successful() {
         getUserByUsername();
@@ -146,6 +148,8 @@ class UserServiceImplTest {
                 .save(any(UserEntity.class));
     }
 
+    // getInfoAboutUser
+
     @Test
     void getInfoAboutUser_successful() {
         getUserByUsername();
@@ -175,6 +179,8 @@ class UserServiceImplTest {
         verify(userMapper, times(0))
                 .toUserDTO(any(UserEntity.class));
     }
+
+    // updateInfoAboutUser
 
     @Test
     void updateInfoAboutUser_successful() {
@@ -209,6 +215,8 @@ class UserServiceImplTest {
         verify(userMapper, times(0))
                 .toUpdateUserDTO(any(UserEntity.class));
     }
+
+    // updateAvatarOfUser
 
     @Test
     void updateAvatarOfUser_successful() {
@@ -281,6 +289,8 @@ class UserServiceImplTest {
         verify(userRepository, times(0))
                 .save(any(UserEntity.class));
     }
+
+    // getUser
 
     @Test
     void getUser_successful() {

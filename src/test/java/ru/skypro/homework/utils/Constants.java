@@ -20,5 +20,5 @@ public class Constants {
     public static final String TITLE = "title";
     public static final int PRICE = 1000;
     public static final String DESCRIPTION = "description";
-    public static final String TEXT = "text";
+    public static final String TEXT = "text_of_comment";
 }

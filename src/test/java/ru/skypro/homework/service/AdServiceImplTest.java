@@ -76,6 +76,8 @@ class AdServiceImplTest {
                 .toAdDTO(any(AdEntity.class));
     }
 
+    // addAd
+
     @Test
     void addAd_successful() {
         mapToAdEntity();
@@ -163,6 +165,8 @@ class AdServiceImplTest {
                 .toAdDTO(any(AdEntity.class));
     }
 
+    // getInfoAboutAd
+
     @Test
     void getInfoAboutAd_successful() {
         getAdById();
@@ -193,6 +197,8 @@ class AdServiceImplTest {
         verify(adMapper, times(0))
                 .toExtendedAdDTO(any(AdEntity.class));
     }
+
+    // deleteAd
 
     @Test
     void deleteAd_successful() {
@@ -260,6 +266,8 @@ class AdServiceImplTest {
                 .deleteImage(anyInt());
     }
 
+    // updateInfoAboutAd
+
     @Test
     void updateInfoAboutAd_successful() {
         getAdById();
@@ -291,6 +299,8 @@ class AdServiceImplTest {
         verify(adMapper, times(0))
                 .toAdDTO(any(AdEntity.class));
     }
+
+    // getAllAdsOfUser
 
     @Test
     void getAllAdsOfUser_successful() {
@@ -329,6 +339,8 @@ class AdServiceImplTest {
         verify(adMapper, times(0))
                 .toAdDTO(any(AdEntity.class));
     }
+
+    // updateImageOfAd
 
     @Test
     void updateImageOfAd_successful() {
@@ -393,6 +405,8 @@ class AdServiceImplTest {
                 .save(any(AdEntity.class));
     }
 
+    // getById
+
     @Test
     void getById_successful() {
         getAdById();
@@ -415,6 +429,8 @@ class AdServiceImplTest {
         verify(adRepository, times(1))
                 .findById(anyInt());
     }
+
+    // Utils
 
     private void getAdById() {
         when(adRepository.findById(anyInt()))

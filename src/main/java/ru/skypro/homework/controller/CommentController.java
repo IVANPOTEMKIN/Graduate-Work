@@ -82,6 +82,11 @@ public class CommentController {
                             content = @Content()
                     ),
                     @ApiResponse(
+                            responseCode = CODE_403,
+                            description = DESCRIPTION_CODE_403,
+                            content = @Content()
+                    ),
+                    @ApiResponse(
                             responseCode = CODE_404,
                             description = DESCRIPTION_CODE_404,
                             content = @Content()

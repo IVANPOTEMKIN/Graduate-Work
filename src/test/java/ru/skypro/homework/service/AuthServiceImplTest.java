@@ -45,6 +45,8 @@ class AuthServiceImplTest {
         authService = new AuthServiceImpl(encoder, userRepository, userMapper, detailsService);
     }
 
+    // login
+
     @Test
     void login_successful() {
         loadUser();
@@ -89,6 +91,8 @@ class AuthServiceImplTest {
         verify(encoder, times(1))
                 .matches(anyString(), anyString());
     }
+
+    // register
 
     @Test
     void register_successful() {

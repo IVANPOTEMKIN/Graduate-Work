@@ -1,4 +1,4 @@
-package ru.skypro.homework.controller.WebMvcTest;
+package ru.skypro.homework.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.controller.UserController;
 import ru.skypro.homework.dto.auth.NewPasswordDTO;
 import ru.skypro.homework.dto.user.UpdateUserDTO;
 import ru.skypro.homework.entity.ImageEntity;
@@ -87,6 +86,8 @@ class UserControllerTest {
     private UserController imageController;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    // updatePassword
 
     @Test
     @WithMockUser(username = USERNAME, authorities = "ADMIN")
@@ -191,6 +192,8 @@ class UserControllerTest {
                 .andExpect(content().string(new ReusePasswordException().getMessage()));
     }
 
+    // getInfoAboutUser
+
     @Test
     @WithMockUser(username = USERNAME, authorities = "ADMIN")
     void getInfoAboutUser_successful() throws Exception {
@@ -228,6 +231,8 @@ class UserControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(new UserNotFoundException().getMessage()));
     }
+
+    // updateInfoAboutUser
 
     @Test
     @WithMockUser(username = USERNAME, authorities = "ADMIN")
@@ -289,6 +294,8 @@ class UserControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(new UserNotFoundException().getMessage()));
     }
+
+    // updateAvatarOfUser
 
     @Test
     @WithMockUser(username = USERNAME, authorities = "ADMIN")
@@ -393,6 +400,8 @@ class UserControllerTest {
                         }))
                 .andExpect(status().isExpectationFailed());
     }
+
+    // Utils
 
     private static Stream<Arguments> paramsFor_UpdatePassword_test() {
         return Stream.of(

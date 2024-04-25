@@ -38,6 +38,8 @@ class ImageServiceImplTest {
         service = new ImageServiceImpl(imageRepository, imageMapper);
     }
 
+    // saveImage
+
     @Test
     void saveImage_successful() {
         ImageEntity expected = createImageEntity();
@@ -68,6 +70,8 @@ class ImageServiceImplTest {
         verify(imageRepository, times(0))
                 .save(any(ImageEntity.class));
     }
+
+    // downloadImage
 
     @Test
     void downloadImage_successful() {
@@ -102,6 +106,8 @@ class ImageServiceImplTest {
         verify(imageRepository, times(1))
                 .findById(anyInt());
     }
+
+    // deleteImage
 
     @Test
     void deleteImage_successful() {
@@ -142,6 +148,8 @@ class ImageServiceImplTest {
         verify(imageRepository, times(0))
                 .delete(any(ImageEntity.class));
     }
+
+    // Utils
 
     private void saveImage(MultipartFile file, ImageEntity entity) {
         saveToDB(entity);

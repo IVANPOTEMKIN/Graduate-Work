@@ -53,6 +53,8 @@ class CommentServiceImplTest {
         commentService = new CommentServiceImpl(commentRepository, adService, userService, commentMapper);
     }
 
+    // getAllCommentsOfAd
+
     @Test
     void getAllCommentsOfAd_successful() {
         getAdById();
@@ -90,6 +92,8 @@ class CommentServiceImplTest {
         verify(commentMapper, times(0))
                 .toCommentDTO(any(CommentEntity.class));
     }
+
+    // addCommentToAd
 
     @Test
     void addCommentToAd_successful() {
@@ -159,6 +163,8 @@ class CommentServiceImplTest {
                 .toCommentDTO(any(CommentEntity.class));
     }
 
+    // deleteComment
+
     @Test
     void deleteComment_successful() {
         getCommentById();
@@ -181,6 +187,8 @@ class CommentServiceImplTest {
         verify(commentRepository, times(0))
                 .delete(any(CommentEntity.class));
     }
+
+    // updateComment
 
     @Test
     void updateComment_successful() {
@@ -213,6 +221,8 @@ class CommentServiceImplTest {
         verify(commentMapper, times(0))
                 .toCommentDTO(any(CommentEntity.class));
     }
+
+    // Utils
 
     private void getCommentById() {
         when(commentRepository.findCommentEntityByIdAndAd_Id(anyInt(), anyInt()))
