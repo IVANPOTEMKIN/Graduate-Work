@@ -34,7 +34,7 @@
 
 <br> 
 
-<summary >
+<summary>
 <i> Описание приложения </i>
 </summary>
 
@@ -330,6 +330,8 @@
 
 <li>
 <i> Запустить frontend Docker с помощью команды: </i>
+
+<br>
 
 <blockquote> docker run -p 3000:3000 --rm ghcr.io/dmitry-bizin/front-react-avito:v1.21 </blockquote>
 
