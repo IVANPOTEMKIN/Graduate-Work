@@ -1,51 +1,53 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.core.userdetails.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.Register;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import ru.skypro.homework.dto.auth.LoginDTO;
+import ru.skypro.homework.dto.auth.RegisterDTO;
+import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exception.password.WrongPasswordException;
+import ru.skypro.homework.exception.user.UserAlreadyAddedException;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
+import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
+
 @Service
+@Validated
+@RequiredArgsConstructor
+@Transactional(isolation = SERIALIZABLE)
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final UserDetailsServiceImpl detailsService;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder) {
+    @Override
+    public boolean login(LoginDTO dto) {
+        UserDetails details = detailsService.loadUserByUsername(dto.getUsername());
 
-        this.manager = manager;
-        this.encoder = passwordEncoder;
+        if (!encoder.matches(dto.getPassword(), details.getPassword())) {
+            throw new WrongPasswordException();
+        }
+        return true;
     }
 
     @Override
-    public boolean login(String userName, String password) {
+    public boolean register(RegisterDTO dto) {
+        UserEntity user = userMapper.toUserEntity(dto);
 
-        if (!manager.userExists(userName)) {
-            return false;
+        if (userRepository.findUserEntityByUsername(user.getUsername()).isPresent()) {
+            throw new UserAlreadyAddedException();
         }
 
-        UserDetails userDetails = manager.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
-    }
-
-    @Override
-    public boolean register(Register register) {
-
-        if (manager.userExists(register.getUsername())) {
-            return false;
-        }
-
-        manager.createUser(
-                User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
+        user.setPassword(encoder.encode(user.getPassword()));
+        userRepository.save(user);
         return true;
     }
 }

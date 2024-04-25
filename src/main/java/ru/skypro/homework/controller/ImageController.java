@@ -5,42 +5,29 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import ru.skypro.homework.dto.auth.LoginDTO;
-import ru.skypro.homework.dto.auth.RegisterDTO;
-import ru.skypro.homework.service.AuthService;
+import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.service.ImageService;
 
-import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
+import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 import static ru.skypro.homework.constants.documentation.CodesAndDescriptions.*;
 import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/images")
 @CrossOrigin(value = "http://localhost:3000")
-public class AuthController {
+public class ImageController {
 
-    private final AuthService authService;
+    private final ImageService imageService;
 
     @Operation(
-            tags = TAG_AUTHORIZATION,
-            summary = AUTHORIZATION_USER,
+            tags = TAG_IMAGES,
+            summary = GET_AVATAR,
             responses = {
                     @ApiResponse(
                             responseCode = CODE_200,
                             description = DESCRIPTION_CODE_200,
-                            content = @Content()
-                    ),
-                    @ApiResponse(
-                            responseCode = CODE_400,
-                            description = DESCRIPTION_CODE_400,
-                            content = @Content()
-                    ),
-                    @ApiResponse(
-                            responseCode = CODE_401,
-                            description = DESCRIPTION_CODE_401,
                             content = @Content()
                     ),
                     @ApiResponse(
@@ -56,24 +43,23 @@ public class AuthController {
             }
     )
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
-        authService.login(dto);
-        return ResponseEntity.ok().build();
+    @GetMapping(value = "/user/{id}", produces = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
+    public ResponseEntity<byte[]> getAvatar(@PathVariable int id) {
+        return ResponseEntity.ok(imageService.downloadImage(id));
     }
 
     @Operation(
-            tags = TAG_REGISTRATION,
-            summary = REGISTRATION_USER,
+            tags = TAG_IMAGES,
+            summary = GET_IMAGE,
             responses = {
                     @ApiResponse(
-                            responseCode = CODE_201,
-                            description = DESCRIPTION_CODE_201,
+                            responseCode = CODE_200,
+                            description = DESCRIPTION_CODE_200,
                             content = @Content()
                     ),
                     @ApiResponse(
-                            responseCode = CODE_400,
-                            description = DESCRIPTION_CODE_400,
+                            responseCode = CODE_404,
+                            description = DESCRIPTION_CODE_404,
                             content = @Content()
                     ),
                     @ApiResponse(
@@ -84,9 +70,8 @@ public class AuthController {
             }
     )
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDTO dto) {
-        authService.register(dto);
-        return ResponseEntity.status(CREATED).build();
+    @GetMapping(value = "/ad/{id}", produces = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
+    public ResponseEntity<byte[]> getImage(@PathVariable int id) {
+        return ResponseEntity.ok(imageService.downloadImage(id));
     }
 }
