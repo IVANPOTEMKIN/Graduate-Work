@@ -16,9 +16,9 @@
 [//]: # (Изображения)
 <div style="text-align: center">
 
-<img src="1.jpg" alt="Скриншот приложения" width="410" height="200"/>
-<img src="2.jpg" alt="Скриншот приложения" width="410" height="200"/>
-<img src="3.jpg" alt="Скриншот приложения" width="410" height="200"/>
+<img src="1.jpg" alt="Скриншот приложения" width="620" height="300"/>
+<img src="2.jpg" alt="Скриншот приложения" width="620" height="300"/>
+<img src="3.jpg" alt="Скриншот приложения" width="620" height="300"/>
 
 <br> <br>
 
@@ -31,6 +31,8 @@
 
 [//]: # (Описание)
 <details>
+
+<br> 
 
 <summary >
 <i> Описание приложения </i>
@@ -55,6 +57,8 @@
 [//]: # (Функионал)
 <details>
 
+<br> 
+
 <summary>
 <i> Функционал приложения </i>
 </summary>
@@ -77,6 +81,8 @@
 <li>
 
 <details>
+
+<br> 
 
 <summary>
 <i> Пользователи </i>
@@ -114,6 +120,8 @@
 <li>
 
 <details>
+
+<br> 
 
 <summary>
 <i> Объявления </i>
@@ -164,6 +172,8 @@
 
 <details>
 
+<br> 
+
 <summary>
 <i> Комментарии </i>
 </summary>
@@ -206,6 +216,8 @@
 
 [//]: # (Стек)
 <details>
+
+<br> 
 
 <summary>
 <i> Стек технологий </i>
@@ -298,6 +310,8 @@
 [//]: # (Запуск)
 <details>
 
+<br> 
+
 <summary>
 <i> Как запустить приложение </i>
 </summary>
@@ -339,6 +353,8 @@
 
 [//]: # (Автор)
 <details>
+
+<br> 
 
 <summary>
 <i> Автор проекта </i>
