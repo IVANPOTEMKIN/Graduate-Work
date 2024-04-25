@@ -24,8 +24,8 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
-    private final ImageRepository repository;
-    private final ImageMapper mapper;
+    private final ImageRepository imageRepository;
+    private final ImageMapper imageMapper;
 
     @Value("${images.folder}")
     private String directory;
@@ -66,21 +66,41 @@ public class ImageServiceImpl implements ImageService {
             throw new FilePathNotFoundException();
         }
 
-        repository.delete(image);
+        imageRepository.delete(image);
         return true;
     }
 
+    /**
+     * Сохранение изображения в БД
+     *
+     * @param file {@link MultipartFile}
+     * @param path {@link Path}
+     * @return {@link ImageEntity}
+     */
     private ImageEntity saveToDB(MultipartFile file, Path path) {
-        ImageEntity image = mapper.toImageEntity(file);
+        ImageEntity image = imageMapper.toImageEntity(file);
         image.setPath(path.toString());
-        return repository.save(image);
+        return imageRepository.save(image);
     }
 
+    /**
+     * Получение изображения по ID
+     *
+     * @param id <i> ID изображения </i>
+     * @return {@link ImageEntity}
+     */
     private ImageEntity getImage(int id) {
-        return repository.findById(id)
+        return imageRepository.findById(id)
                 .orElseThrow(ImageNotFoundException::new);
     }
 
+    /**
+     * Создание директории и сохранения файла локально
+     *
+     * @param file {@link MultipartFile}
+     * @return {@link Path} <i> Путь сохранения файла локально </i>
+     * @throws IOException <i> Возможное исключение при сохранении файла </i>
+     */
     private Path savePath(MultipartFile file) throws IOException {
         Path path = createPath(file);
 
@@ -99,6 +119,12 @@ public class ImageServiceImpl implements ImageService {
         return path;
     }
 
+    /**
+     * Генерация пути сохранения файла на основе директории и данных файла
+     *
+     * @param file {@link MultipartFile}
+     * @return {@link Path} <i> Путь сохранения файла локально </i>
+     */
     private Path createPath(MultipartFile file) {
         Random random = new Random();
 
@@ -107,6 +133,12 @@ public class ImageServiceImpl implements ImageService {
                 + getExtensions(Objects.requireNonNull(file.getOriginalFilename())));
     }
 
+    /**
+     * Получение нового имени файла на основе оригинального
+     *
+     * @param fileName <i> Оригинальное имя файла</i>
+     * @return {@link String} <i> Новое имя файла </i>
+     */
     private String getExtensions(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }

@@ -14,6 +14,18 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.GenerationType.IDENTITY;
 
+/**
+ * <code> <b> id </b> </code> <i> ID пользователя </i> <br>
+ * <code> <b> username </b> </code> <i> Логин пользователя </i> <br>
+ * <code> <b> password </b> </code> <i> Пароль пользователя </i> <br>
+ * <code> <b> firstName </b> </code> <i> Имя пользователя </i> <br>
+ * <code> <b> lastName </b> </code> <i> Фамилия пользователя </i> <br>
+ * <code> <b> phoneNumber </b> </code> <i> Телефон пользователя </i> <br>
+ * <code> <b> role </b> </code> <i> Роль пользователя </i> <br>
+ * <code> <b> avatar </b> </code> {@link ImageEntity} <br>
+ * <code> <b> ads </b> </code> <code> List<{@link AdEntity}> </code> <br>
+ * <code> <b> comments </b> </code> <code> List<{@link CommentEntity}> </code> <br>
+ */
 @Entity
 @Getter
 @Setter

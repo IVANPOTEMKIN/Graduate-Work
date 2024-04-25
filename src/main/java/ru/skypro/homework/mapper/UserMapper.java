@@ -7,9 +7,18 @@ import ru.skypro.homework.entity.UserEntity;
 
 public interface UserMapper {
 
+    /**
+     * {@link UserEntity} -> {@link UserDTO}
+     */
     UserDTO toUserDTO(UserEntity entity);
 
+    /**
+     * {@link UserEntity} -> {@link UpdateUserDTO}
+     */
     UpdateUserDTO toUpdateUserDTO(UserEntity entity);
 
+    /**
+     * {@link RegisterDTO} -> {@link UserEntity}
+     */
     UserEntity toUserEntity(RegisterDTO dto);
 }

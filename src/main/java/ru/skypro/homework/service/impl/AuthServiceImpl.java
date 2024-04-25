@@ -2,7 +2,6 @@ package ru.skypro.homework.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +24,9 @@ import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder encoder;
-    private final UserRepository repository;
-    private final UserMapper mapper;
-    private final UserDetailsService detailsService;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final UserDetailsServiceImpl detailsService;
 
     @Override
     public boolean login(LoginDTO dto) {
@@ -41,14 +40,14 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean register(RegisterDTO dto) {
-        UserEntity user = mapper.toUserEntity(dto);
+        UserEntity user = userMapper.toUserEntity(dto);
 
-        if (repository.findUserEntityByUsername(user.getUsername()).isPresent()) {
+        if (userRepository.findUserEntityByUsername(user.getUsername()).isPresent()) {
             throw new UserAlreadyAddedException();
         }
 
         user.setPassword(encoder.encode(user.getPassword()));
-        repository.save(user);
+        userRepository.save(user);
         return true;
     }
 }

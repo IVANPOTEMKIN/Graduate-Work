@@ -13,11 +13,11 @@ import ru.skypro.homework.repository.UserRepository;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        UserEntity entity = repository.findUserEntityByUsername(username)
+        UserEntity entity = userRepository.findUserEntityByUsername(username)
                 .orElseThrow(UserNotFoundException::new);
 
         return User.builder()

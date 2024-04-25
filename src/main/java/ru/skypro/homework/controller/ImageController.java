@@ -19,7 +19,7 @@ import static ru.skypro.homework.constants.documentation.TagsAndNames.*;
 @CrossOrigin(value = "http://localhost:3000")
 public class ImageController {
 
-    private final ImageService service;
+    private final ImageService imageService;
 
     @Operation(
             tags = TAG_IMAGES,
@@ -45,7 +45,7 @@ public class ImageController {
 
     @GetMapping(value = "/user/{id}", produces = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
     public ResponseEntity<byte[]> getAvatar(@PathVariable int id) {
-        return ResponseEntity.ok(service.downloadImage(id));
+        return ResponseEntity.ok(imageService.downloadImage(id));
     }
 
     @Operation(
@@ -72,6 +72,6 @@ public class ImageController {
 
     @GetMapping(value = "/ad/{id}", produces = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
     public ResponseEntity<byte[]> getImage(@PathVariable int id) {
-        return ResponseEntity.ok(service.downloadImage(id));
+        return ResponseEntity.ok(imageService.downloadImage(id));
     }
 }

@@ -31,16 +31,16 @@ import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 @Transactional(isolation = SERIALIZABLE)
 public class AdServiceImpl implements AdService {
 
-    private final AdRepository repository;
+    private final AdRepository adRepository;
     private final UserService userService;
     private final ImageService imageService;
-    private final AdMapper mapper;
+    private final AdMapper adMapper;
 
     @Override
     public AdsDTO getAllAds() {
-        List<AdDTO> list = repository.findAll()
+        List<AdDTO> list = adRepository.findAll()
                 .stream()
-                .map(mapper::toAdDTO)
+                .map(adMapper::toAdDTO)
                 .collect(Collectors.toList());
 
         return new AdsDTO(list.size(), list);
@@ -50,20 +50,20 @@ public class AdServiceImpl implements AdService {
     public AdDTO addAd(CreateOrUpdateAdDTO dto,
                        MultipartFile file) {
 
-        AdEntity ad = mapper.toAdEntity(dto);
+        AdEntity ad = adMapper.toAdEntity(dto);
         UserEntity user = userService.getUser();
         ImageEntity image = imageService.saveImage(file);
 
         ad.setAuthor(user);
         ad.setImage(image);
 
-        repository.save(ad);
-        return mapper.toAdDTO(ad);
+        adRepository.save(ad);
+        return adMapper.toAdDTO(ad);
     }
 
     @Override
     public ExtendedAdDTO getInfoAboutAd(int id) {
-        return mapper.toExtendedAdDTO(getById(id));
+        return adMapper.toExtendedAdDTO(getById(id));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class AdServiceImpl implements AdService {
             "or @adServiceImpl.isAuthor(authentication.getName, #id)")
     public boolean deleteAd(int id) {
         AdEntity ad = getById(id);
-        repository.delete(ad);
+        adRepository.delete(ad);
         imageService.deleteImage(ad.getImage().getId());
         return true;
     }
@@ -85,17 +85,17 @@ public class AdServiceImpl implements AdService {
         ad.setPrice(dto.getPrice());
         ad.setDescription(dto.getDescription());
 
-        repository.save(ad);
-        return mapper.toAdDTO(ad);
+        adRepository.save(ad);
+        return adMapper.toAdDTO(ad);
     }
 
     @Override
     public AdsDTO getAllAdsOfUser() {
         UserEntity user = userService.getUser();
 
-        List<AdDTO> list = repository.findAdEntitiesByAuthor(user)
+        List<AdDTO> list = adRepository.findAdEntitiesByAuthor(user)
                 .stream()
-                .map(mapper::toAdDTO)
+                .map(adMapper::toAdDTO)
                 .collect(Collectors.toList());
 
         return new AdsDTO(list.size(), list);
@@ -107,16 +107,23 @@ public class AdServiceImpl implements AdService {
         AdEntity ad = getById(id);
         ImageEntity image = imageService.saveImage(file);
         ad.setImage(image);
-        repository.save(ad);
+        adRepository.save(ad);
         return image.getPath();
     }
 
     @Override
     public AdEntity getById(int id) {
-        return repository.findById(id)
+        return adRepository.findById(id)
                 .orElseThrow(AdNotFoundException::new);
     }
 
+    /**
+     * Проверка соответствия автора объявления с текущим пользователем
+     *
+     * @param username <code> Authentication.getName </code>
+     * @param id       <i> ID объявления </i>
+     * @return {@link Boolean} <i> Результат выполнения метода </i>
+     */
     public boolean isAuthor(String username, int id) {
         AdEntity ad = getById(id);
         return ad.getAuthor().getUsername().equals(username);

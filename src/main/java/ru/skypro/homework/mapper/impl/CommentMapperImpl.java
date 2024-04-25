@@ -16,7 +16,11 @@ public class CommentMapperImpl implements CommentMapper {
         CommentDTO dto = new CommentDTO();
 
         dto.setAuthor(entity.getAuthor().getId());
-        dto.setAuthorImage(USER.getUrl() + entity.getAuthor().getAvatar().getId());
+
+        if (entity.getAuthor().getAvatar() != null) {
+            dto.setAuthorImage(USER.getUrl() + entity.getAuthor().getAvatar().getId());
+        }
+
         dto.setAuthorFirstName(entity.getAuthor().getFirstName());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setPk(entity.getId());

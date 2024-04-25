@@ -27,16 +27,18 @@ import static ru.skypro.homework.utils.Examples.createImageEntity;
 class ImageServiceImplTest {
 
     @Mock
-    private ImageRepository repository;
+    private ImageRepository imageRepository;
     @Mock
-    private ImageMapper mapper;
+    private ImageMapper imageMapper;
     @InjectMocks
     private ImageServiceImpl service;
 
     @BeforeEach
     void setUp() {
-        service = new ImageServiceImpl(repository, mapper);
+        service = new ImageServiceImpl(imageRepository, imageMapper);
     }
+
+    // saveImage
 
     @Test
     void saveImage_successful() {
@@ -49,25 +51,27 @@ class ImageServiceImplTest {
         assertNotNull(actual);
         assertEquals(expected, actual);
 
-        verify(mapper, times(1))
+        verify(imageMapper, times(1))
                 .toImageEntity(any(MultipartFile.class));
-        verify(repository, times(1))
+        verify(imageRepository, times(1))
                 .save(any(ImageEntity.class));
     }
 
     @Test
     void saveImage_FailedRecordFileException() {
-        when(mapper.toImageEntity(any(MultipartFile.class)))
+        when(imageMapper.toImageEntity(any(MultipartFile.class)))
                 .thenThrow(FailedRecordFileException.class);
 
         assertThrows(FailedRecordFileException.class,
                 () -> service.saveImage(createFilePNG()));
 
-        verify(mapper, times(1))
+        verify(imageMapper, times(1))
                 .toImageEntity(any(MultipartFile.class));
-        verify(repository, times(0))
+        verify(imageRepository, times(0))
                 .save(any(ImageEntity.class));
     }
+
+    // downloadImage
 
     @Test
     void downloadImage_successful() {
@@ -79,7 +83,7 @@ class ImageServiceImplTest {
         assertNotNull(actual);
         assertArrayEquals(expected, actual);
 
-        verify(repository, times(1))
+        verify(imageRepository, times(1))
                 .findById(anyInt());
     }
 
@@ -88,7 +92,7 @@ class ImageServiceImplTest {
         assertThrows(ImageNotFoundException.class,
                 () -> service.downloadImage(anyInt()));
 
-        verify(repository, times(1))
+        verify(imageRepository, times(1))
                 .findById(anyInt());
     }
 
@@ -99,9 +103,11 @@ class ImageServiceImplTest {
         assertThrows(FilePathNotFoundException.class,
                 () -> service.downloadImage(anyInt()));
 
-        verify(repository, times(1))
+        verify(imageRepository, times(1))
                 .findById(anyInt());
     }
+
+    // deleteImage
 
     @Test
     void deleteImage_successful() {
@@ -113,9 +119,9 @@ class ImageServiceImplTest {
         assertThrows(FilePathNotFoundException.class,
                 () -> service.downloadImage(anyInt()));
 
-        verify(repository, times(3))
+        verify(imageRepository, times(3))
                 .findById(anyInt());
-        verify(repository, times(1))
+        verify(imageRepository, times(1))
                 .delete(any(ImageEntity.class));
     }
 
@@ -124,9 +130,9 @@ class ImageServiceImplTest {
         assertThrows(ImageNotFoundException.class,
                 () -> service.deleteImage(anyInt()));
 
-        verify(repository, times(1))
+        verify(imageRepository, times(1))
                 .findById(anyInt());
-        verify(repository, times(0))
+        verify(imageRepository, times(0))
                 .delete(any(ImageEntity.class));
     }
 
@@ -137,11 +143,13 @@ class ImageServiceImplTest {
         assertThrows(FilePathNotFoundException.class,
                 () -> service.deleteImage(anyInt()));
 
-        verify(repository, times(1))
+        verify(imageRepository, times(1))
                 .findById(anyInt());
-        verify(repository, times(0))
+        verify(imageRepository, times(0))
                 .delete(any(ImageEntity.class));
     }
+
+    // Utils
 
     private void saveImage(MultipartFile file, ImageEntity entity) {
         saveToDB(entity);
@@ -150,14 +158,14 @@ class ImageServiceImplTest {
     }
 
     private void saveToDB(ImageEntity entity) {
-        when(mapper.toImageEntity(any(MultipartFile.class)))
+        when(imageMapper.toImageEntity(any(MultipartFile.class)))
                 .thenReturn(entity);
-        when(repository.save(any(ImageEntity.class)))
+        when(imageRepository.save(any(ImageEntity.class)))
                 .thenReturn(entity);
     }
 
     private void getImageById(ImageEntity entity) {
-        when(repository.findById(anyInt()))
+        when(imageRepository.findById(anyInt()))
                 .thenReturn(Optional.of(entity));
     }
 }
