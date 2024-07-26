@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/scripts/drop_tables.sql
+  - include:
+      file: liquibase/scripts/create_tables.sql
+  - include:
+      file: liquibase/scripts/insert_user.sql
